@@ -44,8 +44,6 @@ def perform_measurement(measurements, sum, nominal_output_voltage):
 @measurement_service.configuration("Dut setup time (s)", nims.DataType.Float, 1.0)
 @measurement_service.configuration("Aperture time (s)", nims.DataType.Float, 0.001)
 # Aperture time is the period during which an ADC reads the voltage or current on a power supply or SMU. 
-# Aperture time can be specified in seconds (s) or power line cycles (PLCs). Measurement resolution, 
-# measurement speed, and frequency rejection are all functions of aperture time.
 @measurement_service.configuration("Nominal output voltage (V)", nims.DataType.Float, 3.3)
 #Source Settings
 @measurement_service.configuration("Source resource name", nims.DataType.String, 'PPS')
@@ -59,14 +57,6 @@ def perform_measurement(measurements, sum, nominal_output_voltage):
 # On-Off feature
 @measurement_service.configuration("Mode of operation", nims.DataType.Enum, ModeOfOperation.Power_on_dut,
                                    enum_type=ModeOfOperation)
-# # Power ON
-# @measurement_service.configuration("Poweron resource name", nims.DataType.String, 'PPS')
-# @measurement_service.configuration("Poweron voltage level", nims.DataType.Float, 10.0)
-# @measurement_service.configuration("Poweron current limit", nims.DataType.Float, 25.0)
-# # Power Off
-# @measurement_service.configuration("Poweroff source resource name", nims.DataType.String, 'PPS')
-# @measurement_service.configuration("Poweroff load resource name", nims.DataType.String, 'E-load')
-
 
 # configure outputs
 @measurement_service.output("Load voltage v/s time", nims.DataType.DoubleXYData)
@@ -115,7 +105,6 @@ def measure(
                                                                     source_voltage_level, source_current_limit,
                                                                     dut_setup_time)
 
-
         result = measure_dcpower(dcpower_source_session, source_device_channel)
         supply_voltage = result[0]
         supply_current = result[1]
@@ -128,8 +117,6 @@ def measure(
         dcpower_load_session = open_and_configure_dcpower_load(load_resource_name, load_device_channel,
                                                                 load_current_level, load_voltage_limit,
                                                                 aperture_time, dut_setup_time)
-
-
     
         result = measure_dcpower(dcpower_load_session, load_device_channel)
         load_voltage = result[0]
