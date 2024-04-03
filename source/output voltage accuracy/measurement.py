@@ -25,7 +25,6 @@ measurement_service = nims.MeasurementService(
     ui_file_paths=[service_directory / "OutputVoltageAccuracy_PMIC.measui"],
 )
 
-
 def perform_measurement(measurements, sum, nominal_output_voltage):
 
     output_voltage=sum/len(measurements)
@@ -36,8 +35,6 @@ def perform_measurement(measurements, sum, nominal_output_voltage):
 
     return output_voltage, output_voltage_accuracy_mv, output_voltage_accuracy
     
-
-
 
 @measurement_service.register_measurement
 #Measurement Settings
@@ -57,6 +54,7 @@ def perform_measurement(measurements, sum, nominal_output_voltage):
 # On-Off feature
 @measurement_service.configuration("Mode of operation", nims.DataType.Enum, ModeOfOperation.Power_on_dut,
                                    enum_type=ModeOfOperation)
+
 
 # configure outputs
 @measurement_service.output("Load voltage v/s time", nims.DataType.DoubleXYData)
@@ -105,6 +103,7 @@ def measure(
                                                                     source_voltage_level, source_current_limit,
                                                                     dut_setup_time)
 
+
         result = measure_dcpower(dcpower_source_session, source_device_channel)
         supply_voltage = result[0]
         supply_current = result[1]
@@ -117,6 +116,8 @@ def measure(
         dcpower_load_session = open_and_configure_dcpower_load(load_resource_name, load_device_channel,
                                                                 load_current_level, load_voltage_limit,
                                                                 aperture_time, dut_setup_time)
+
+
     
         result = measure_dcpower(dcpower_load_session, load_device_channel)
         load_voltage = result[0]
