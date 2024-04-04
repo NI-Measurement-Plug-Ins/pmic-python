@@ -52,18 +52,16 @@ def perform_measurement(measurements, sum, nominal_output_voltage):
 @measurement_service.configuration("Load voltage limit (V)", nims.DataType.Float, 6.0)
 @measurement_service.configuration("Measurement duration (s)", nims.DataType.Float, 1.0)
 # On-Off feature
-@measurement_service.configuration("Mode of operation", nims.DataType.Enum, ModeOfOperation.Power_on_dut,
+@measurement_service.configuration("Mode of operation", nims.DataType.Enum, ModeOfOperation.Perform_measurement,
                                    enum_type=ModeOfOperation)
 
 
 # configure outputs
 @measurement_service.output("Load voltage v/s time", nims.DataType.DoubleXYData)
-# @measurement_service.output("Measured output voltage (V)", nims.DataType.DoubleArray1D)
 @measurement_service.output("Measured output voltage(V)", nims.DataType.Float)
 @measurement_service.output("Output voltage accuracy (V)", nims.DataType.Float)
 @measurement_service.output("Output voltage accuracy (%)", nims.DataType.Float)
 @measurement_service.output("DUT status", nims.DataType.String)
-# @measurement_service.output("Error out", nims.DataType.Int32)
 
 
 def measure(
