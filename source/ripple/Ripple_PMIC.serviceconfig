@@ -1,8 +1,8 @@
 {
   "services": [
     {
-      "displayName": "Ripple Measurement",
-      "serviceClass": "Ripple Measurement_PMIC_Python",
+      "displayName": "Ripple",
+      "serviceClass": "PMIC_Python",
       "descriptionUrl": "",
       "providedInterfaces": [
         "ni.measurementlink.measurement.v1.MeasurementService",
