@@ -1,8 +1,8 @@
 {
   "services": [
     {
-      "displayName": "Output Voltage Accuracy",
-      "serviceClass": "Output Voltage Accuracy_PMIC_Python",
+      "displayName": "Ripple",
+      "serviceClass": "Ripple_PMIC_Python",
       "descriptionUrl": "",
       "providedInterfaces": [
         "ni.measurementlink.measurement.v1.MeasurementService",
@@ -10,9 +10,9 @@
       ],
       "path": "start.bat",
       "annotations": {
-        "ni/service.description": "Output Voltage Accuracy measurement for PMIC",
+        "ni/service.description": "Ripple measurement for PMIC",
         "ni/service.collection": "PMIC_Python",
-        "ni/service.tags": ["output voltage accuracy", "pmic"]
+        "ni/service.tags": ["ripple", "PMIC"]
       }
     }
   ]
