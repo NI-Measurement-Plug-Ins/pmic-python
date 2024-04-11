@@ -2,16 +2,30 @@ import sys
 from enum import Enum
 
 import ni_measurementlink_service as nims
-
-from _configure_dcpower import *
-from _configure_niscope_acqusition import *
 from _helpers import *
+
+from configure_dcpower import *
+from configure_niscope_acquisition import *
+import numpy as np
 
 
 class ModeOfOperation(Enum):
     power_on_dut = 0
     perform_measurement = 1
     power_off_dut = 2
+    pass
+
+
+def calculate_pk_to_pk(signal):
+    return np.max(signal) - np.min(signal)
+
+
+def calculate_rms(signal):
+    return np.sqrt(np.mean(np.square(signal)))
+
+
+def format_dut_info(status, voltage, current):
+    return "The DUT is powered %s\nVoltage Level: %.3f V\nCurrent Limit: %.3f A" % (status, voltage, current)
 
 
 script_or_exe = sys.executable if getattr(sys, "frozen", False) else __file__
@@ -26,7 +40,7 @@ measurement_service = nims.MeasurementService(
 @measurement_service.register_measurement
 # On-Off feature
 @measurement_service.configuration("Mode of operation", nims.DataType.Enum, default_value=ModeOfOperation.perform_measurement, enum_type=ModeOfOperation)
-@measurement_service.configuration("DUT setup time (s)", nims.DataType.Float, 0.005)
+@measurement_service.configuration("DUT setup time (s)", nims.DataType.Float, 1.0)
 @measurement_service.configuration("Aperture time (s)", nims.DataType.Float, 0.005)
 @measurement_service.configuration("Source resource name", nims.DataType.String, 'PPS')
 @measurement_service.configuration("Source voltage level (V)", nims.DataType.Float, 10.0)

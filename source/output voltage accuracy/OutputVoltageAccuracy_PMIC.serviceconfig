@@ -2,7 +2,7 @@
   "services": [
     {
       "displayName": "Output Voltage Accuracy",
-      "serviceClass": "PMIC_Python",
+      "serviceClass": "Output Voltage Accuracy_PMIC_Python",
       "descriptionUrl": "",
       "providedInterfaces": [
         "ni.measurementlink.measurement.v1.MeasurementService",
@@ -10,9 +10,9 @@
       ],
       "path": "start.bat",
       "annotations": {
-        "ni/service.description": "",
-        "ni/service.collection": "",
-        "ni/service.tags": []
+        "ni/service.description": "Output Voltage Accuracy measurement for PMIC",
+        "ni/service.collection": "PMIC",
+        "ni/service.tags": ["output voltage accuracy", "pmic"]
       }
     }
   ]

@@ -5,7 +5,6 @@ import pathlib
 from typing import Any, Callable, TypeVar
 
 import click
-import numpy as np
 
 
 class TestStandSupport(object):
@@ -80,15 +79,3 @@ def verbosity_option(func: F) -> F:
         count=True,
         help="Enable verbose logging. Repeat to increase verbosity.",
     )(func)
-
-
-def calculate_pk_to_pk(signal):
-    return np.max(signal) - np.min(signal)
-
-
-def calculate_rms(signal):
-    return np.sqrt(np.mean(np.square(signal)))
-
-
-def format_dut_info(status, voltage, current):
-    return "The DUT is powered %s\nVoltage Level: %.3f V\nCurrent Limit: %.3f A" % (status, voltage, current)

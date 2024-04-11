@@ -2,7 +2,7 @@
   "services": [
     {
       "displayName": "Ripple",
-      "serviceClass": "PMIC_Python",
+      "serviceClass": "Ripple_PMIC_Python",
       "descriptionUrl": "",
       "providedInterfaces": [
         "ni.measurementlink.measurement.v1.MeasurementService",
