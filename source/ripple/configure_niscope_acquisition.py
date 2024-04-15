@@ -10,9 +10,11 @@ def perform_scope_acquisition(
         sample_rate: float,
         acquisition_time: float,
         probe_attenuation: float,
+        ripple_voltages: list[float],
         ripple_graph: DoubleXYData
 ):
     input_impedance = 1000000  # 1 mega ohm
+    t = 0
 
     with niscope.Session(resource_name) as session:
         session.channels[channel_name].configure_vertical(
@@ -42,21 +44,23 @@ def perform_scope_acquisition(
             enforce_realtime=True
         )
 
-        with session.initiate():
-            waveforms = session.channels[channel_name].fetch(
-                num_samples=int(sample_rate * acquisition_time),
-                timeout=hightime.timedelta(acquisition_time * 2)
-            )
+        while acquisition_time > 0:
+            with session.initiate():
+                waveforms = session.channels[channel_name].fetch(
+                    num_samples=int(sample_rate * (1 if (acquisition_time > 1) else acquisition_time)),
+                    timeout=hightime.timedelta(acquisition_time * 2)
+                )
 
-        if waveforms:
-            waveform_info = waveforms[0]
-            ripple_voltages = list(waveform_info.samples)
+            if waveforms:
+                waveform_info = waveforms[0]
+                ripples = list(waveform_info.samples)
+                ripple_voltages.extend(ripples)
 
-        t = 0
-        dt = 1 / session.horz_sample_rate
-        for i in ripple_voltages:
-            ripple_graph.x_data.append(t)
-            ripple_graph.y_data.append(i)
-            t += dt
+            dt = 1 / session.horz_sample_rate
+            for i in ripples:
+                ripple_graph.x_data.append(t)
+                ripple_graph.y_data.append(i)
+                t += dt
 
-    return ripple_voltages
+            acquisition_time -= 1
+            yield ripple_voltages

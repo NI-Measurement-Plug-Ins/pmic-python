@@ -39,7 +39,8 @@ measurement_service = nims.MeasurementService(
 
 @measurement_service.register_measurement
 # On-Off feature
-@measurement_service.configuration("Mode of operation", nims.DataType.Enum, default_value=ModeOfOperation.perform_measurement, enum_type=ModeOfOperation)
+@measurement_service.configuration("Mode of operation", nims.DataType.Enum,
+                                   default_value=ModeOfOperation.perform_measurement, enum_type=ModeOfOperation)
 @measurement_service.configuration("DUT setup time (s)", nims.DataType.Float, 1.0)
 @measurement_service.configuration("Aperture time (s)", nims.DataType.Float, 0.005)
 @measurement_service.configuration("Source resource name", nims.DataType.String, 'PPS')
@@ -78,11 +79,11 @@ def measure(
         scope_acquisition_time: float,
         scope_probe_attenuation: float,
 ) -> (float, float, float, float, float, float, DoubleXYData, str):
-
     # EDIT SOURCE AND LOAD CHANNEL NAMES HERE FOR USING DIFFERENT CHANNELS
     source_device_channel = '0'
     load_device_channel = '0'
 
+    ripple_voltages = []
     supply_voltage = supply_current = load_voltage = load_current = ripple_voltage_rms = ripple_voltage_pk_to_pk = 0
     ripple_graph = DoubleXYData()
     dut_status = ''
@@ -115,19 +116,22 @@ def measure(
 
         # code to reset DC sources if error occurs at scope device
         try:
-            ripple_voltages = perform_scope_acquisition(
+            ripple_generator = perform_scope_acquisition(
                 scope_resource_name,
                 scope_channel_name,
                 scope_sample_rate,
                 scope_acquisition_time,
                 scope_probe_attenuation,
+                ripple_voltages,
                 ripple_graph
             )
 
-            ripple_graph_array = np.array(ripple_voltages, dtype=np.float64)
-
-            ripple_voltage_rms = calculate_rms(ripple_graph_array)
-            ripple_voltage_pk_to_pk = calculate_pk_to_pk(ripple_graph_array)
+            for ripples in ripple_generator:
+                ripple_graph_array = np.array(ripples, dtype=np.float64)
+                ripple_voltage_rms = calculate_rms(ripple_graph_array)
+                ripple_voltage_pk_to_pk = calculate_pk_to_pk(ripple_graph_array)
+                yield (supply_voltage, supply_current, load_voltage, load_current,
+                       ripple_voltage_rms, ripple_voltage_pk_to_pk, ripple_graph, dut_status)
         except Exception as e:
             reset_dc_source(dcpower_source_session, source_device_channel)
             reset_dc_source(dcpower_load_session, load_device_channel)
