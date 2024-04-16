@@ -30,8 +30,7 @@ def open_and_configure_dcpower_source(
         session.channels[channel_name].commit()
         return session
 
-    except nidcpower.Error as e:
-        print(f"Error Configuring DC Power Source: {e}")
+    except nidcpower.Error:
         session.output_enabled = False
         session.reset()
         session.close()
@@ -68,8 +67,7 @@ def open_and_configure_dcpower_load(
         session.channels[channel_name].commit()
         return session
 
-    except nidcpower.Error as e:
-        print(f"Error Configuring DC Power Load: {e}")
+    except nidcpower.Error:
         session.output_enabled = False
         session.reset()
         session.close()
@@ -88,8 +86,7 @@ def measure_dcpower(session: nidcpower.Session, channel_name: str):
         result = [measurement.voltage, measurement.current, session]
         return result
 
-    except nidcpower.Error as e:
-        print(f"Error : {e}")
+    except nidcpower.Error:
         session.output_enabled = False
         session.reset()
         session.close()
@@ -117,8 +114,7 @@ def measure_voltage(session: nidcpower.Session, channel_name: str, no_of_samples
 
         return volts
 
-    except nidcpower.Error as e:
-        print(f"Error performing measurement: {e}")
+    except nidcpower.Error:
         session.output_enabled = False
         session.reset()
         session.close()
@@ -159,8 +155,7 @@ def power_on_dut(
         session.close()
         return result
 
-    except nidcpower.Error as e:
-        print(f"Error opening and configuring DC power source: {e}")
+    except nidcpower.Error:
         session.output_enabled = False
         session.reset()
         session.close()

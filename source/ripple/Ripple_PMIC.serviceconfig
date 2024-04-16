@@ -1,7 +1,7 @@
 {
   "services": [
     {
-      "displayName": "Ripple",
+      "displayName": "Ripple (Py)",
       "serviceClass": "Ripple_PMIC_Python",
       "descriptionUrl": "",
       "providedInterfaces": [
@@ -11,7 +11,7 @@
       "path": "start.bat",
       "annotations": {
         "ni/service.description": "Ripple measurement for PMIC",
-        "ni/service.collection": "PMIC_Python",
+        "ni/service.collection": "PMIC",
         "ni/service.tags": ["ripple", "PMIC"]
       }
     }
