@@ -100,7 +100,6 @@ def measure(
         load_session = open_and_configure_dcpower_load(load_resource_name, load_device_channel,
                                                        load_current_level, load_voltage_limit_range,
                                                        dut_setup_time, aperture_time)
-        load_session.initiate()
 
         no_of_samples_to_fetch = int(measurement_duration / aperture_time) + 1
         # Perform measurement
