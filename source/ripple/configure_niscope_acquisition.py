@@ -48,7 +48,7 @@ def perform_scope_acquisition(
             with session.initiate():
                 waveforms = session.channels[channel_name].fetch(
                     num_samples=int(sample_rate * (1 if (acquisition_time > 1) else acquisition_time)),
-                    timeout=hightime.timedelta(acquisition_time * 2)
+                    timeout=hightime.timedelta((acquisition_time * 2) + 5)
                 )
 
             if waveforms:
