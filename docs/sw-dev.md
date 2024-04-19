@@ -6,14 +6,14 @@ If you want to commit changes to the repo, we recommend you use the current vers
 - Python >= 3.8 (3.9 recommended)
 - Measurement Link (2024 Q1 or higher) (from NIPM)
 
-Install the below libraries with pip
+Install the below packages using pip:
 
-- ni-measurementlink-generator library
-- ni-measurementlink-service library
-- ni-dcpower
-- ni-scope
+- ni-measurementlink-service
+- ni-measurementlink-generator
+- nidcpower
+- niscope
 
-refer [here](https://www.ni.com/docs/en-US/bundle/measurementlink/page/python-measurement-dependencies.html) for more information
+Refer to [this](https://www.ni.com/docs/en-US/bundle/measurementlink/page/python-measurement-dependencies.html) document for python measurement dependencies.
 
 ## Tested with:
 - Instrument Studio 2024 Q1
