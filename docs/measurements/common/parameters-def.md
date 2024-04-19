@@ -33,7 +33,7 @@
 
 ## Scope configuration
 
-#### Please refer to the device [specs](https://www.ni.com/docs/en-US/bundle/pxie-5122-specs/page/specs.html) for the sample rate and timing values.
+#### Please refer to the device [specs](https://www.ni.com/docs/en-US/bundle/pxi-5122-specs/page/specs.html) for the sample rate and timing values.
 
 1. Sample rate:
    Specifies the sample rate of the scope instrument.

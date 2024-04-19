@@ -12,7 +12,3 @@ This service performs Output Voltage Accuracy measurements.
 2. Run the measurement. The measured output voltage can be seen from the graph.The calculated output voltage accuracy (% and V) are displayed in the panel below.
    
    ![alt text](meas-images/out-volt-accuracy-meas-results.png)
-
-
-
-

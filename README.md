@@ -1,8 +1,8 @@
-# pmic-python
+# PMIC - python
 
  These MeasurementLink Python plugins makes measurements for Power Management IC's.
  
- The tests supplies power to the DUT and sinks power from the DUT and validates the specifications of the DUT by performing measurements.
+ The tests supplies power to the DUT and sinks power from the DUT and validates the DUT's specifications by performing measurements that are common for PMIC's.
 
 ## Key Features
 
@@ -16,13 +16,13 @@ Click here for a detailed list of measurements and their functionality: [Measure
 Instrumentation:
 - NI Programmable Power Supply (PXIe-4151)
 - NI Electronic Load (PXIe-4051)
-- NI Scope (PXIe-5122) (used for ripple)
 - Digital Pattern Instrument (PXIe-6570/1) (note: the software does not include DPI or its dependencies, but it may be required to communicate with the DUT)
+- NI Oscilloscope (PXI-5122) (note: required for Ripple measurement)
 
 Tested hardware setup:
 - PXIe-4151
 - PXIe-4051
-- PXIe-5122 (used in ripple)
+- PXI-5122 (used in ripple)
 - PXIe-6570/1
 
 ## Software Dependencies

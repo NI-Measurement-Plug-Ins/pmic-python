@@ -16,6 +16,8 @@
 
 4. measurement.exe will be present in dist folder.
 
+   ![alt text](images/dist.png)
+
 5. Add service-config, start.bat and UI files in dist folder.
 
    ![alt text](images/dist-folder.png)

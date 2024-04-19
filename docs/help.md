@@ -25,7 +25,7 @@ This workflow is applicable for all the PMIC measurements.
    
    ![alt text](images/power-on-status.png)
 
-### Communication with the DUT
+### Communication with the DUT (if needed)
 
 1. Now that the DUT is powered ON, configure the DUT settings either by using SDC panel or from the native GUI of the DUT.
 
@@ -91,7 +91,11 @@ After adding measurement service into the Instrument Studio as explained above,
 
    ![alt text](images/instr-studio-results-from-ts.png)
 
-9. The same workflow of Power on the DUT, Perform Measurement, and Power off the DUT can be followed in TestStand, by adding three Measurement Steps along with the SDC steps. Make sure to Power off the DUT. 
+9. In TestStand, the measurment test status will be 'Done' if there is no error.
+
+    ![alt text](images/teststand-pass-seq.png)
+
+10. The same workflow of Power on the DUT, Perform Measurement, and Power off the DUT can be followed in TestStand, by adding three Measurement Steps along with the SDC steps. Make sure to Power off the DUT. 
 
    ![alt text](images/teststand-measlink-steps.png)
 
