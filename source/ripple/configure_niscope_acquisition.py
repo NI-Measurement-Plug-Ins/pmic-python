@@ -38,7 +38,7 @@ def perform_scope_acquisition(
 
         session.configure_horizontal_timing(
             min_sample_rate=sample_rate,
-            min_num_pts=int(sample_rate * acquisition_time),
+            min_num_pts=int(sample_rate),
             ref_position=0,
             num_records=1,
             enforce_realtime=True
@@ -47,8 +47,7 @@ def perform_scope_acquisition(
         while acquisition_time > 0:
             with session.initiate():
                 waveforms = session.channels[channel_name].fetch(
-                    num_samples=int(sample_rate * (1 if (acquisition_time > 1) else acquisition_time)),
-                    timeout=hightime.timedelta((acquisition_time * 2) + 5)
+                    num_samples=int(sample_rate * (1 if (acquisition_time > 1) else acquisition_time))
                 )
 
             if waveforms:
