@@ -4,7 +4,12 @@ If you want to commit changes to the repo, we recommend you use the current vers
 ## Software dependencies:
 
 - Python >= 3.8 (3.9 recommended)
-- Measurement Link (2024 Q1 or higher) (from NIPM)
+
+Install the below packages from NIPM
+
+- Measurement Link (2024 Q1 or higher)
+- NI-DCPower (2023 Q4 or higher)
+- NI-Scope (2023 Q4 or higher) (note: required for ripple)
 
 Install the below libraries with pip
 
