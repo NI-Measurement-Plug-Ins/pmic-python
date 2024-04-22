@@ -31,6 +31,8 @@ Install from NI Package Manager:
 - InstrumentStudio (2024 Q1 or higher)
 - Measurement Link (2024 Q1 or higher)
 - NI SDC Add-On (2023 Q4 or higher) (note: only if using DPI for DUT communication)
+- NI-DCPower (2023 Q4 or higher)
+- NI-Scope (2023 Q4 or higher) (note: required for ripple)
 
 Download the latest NI package from the releases section of this repo or add the feed to NI Package Manager to get updates from this repo and other in this community. To use the NI Package Manager feeds, refer to this: [Subscribing to package feeds](https://github.com/NI-MeasurementLink-Plug-Ins/package-manager-feeds)
 
