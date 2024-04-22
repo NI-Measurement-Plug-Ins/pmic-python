@@ -224,6 +224,7 @@
             <PackageRelationships />
             <ProductName>MyProduct</ProductName>
             <Section>Add-Ons</Section>
+            <StoreProduct>true</StoreProduct>
             <Synopsis>Measurements for PMIC using MeasurementLink</Synopsis>
             <Version>1.0.0.0</Version>
         </Distribution>
