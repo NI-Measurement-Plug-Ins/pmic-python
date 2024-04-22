@@ -18,7 +18,7 @@ def perform_scope_acquisition(
 
     with niscope.Session(resource_name) as session:
         session.channels[channel_name].configure_vertical(
-            range=5.0,
+            range=2.0,
             offset=0.0,
             probe_attenuation=probe_attenuation,
             coupling=niscope.VerticalCoupling.AC
