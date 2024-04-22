@@ -18,7 +18,7 @@ Refer to [this](https://www.ni.com/docs/en-US/bundle/measurementlink/page/python
 ## Tested with:
 - Instrument Studio 2024 Q1
 - TestStand 2022 Q4
-- Semiconductor Device Control Add-On 2023 Q4 (if needed)
+- Semiconductor Device Control Add-On 2023 Q4
 
 ## Building NIPM packages
 To build NIPM packages for the measurement plugin, refer to [this](build-plugin.md) document.
