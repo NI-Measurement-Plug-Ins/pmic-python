@@ -1,6 +1,9 @@
 # Output Voltage Accuracy
 This service performs Output Voltage Accuracy measurements.
 
+## Hardware Setup
+![alt text](meas-images/hw-setup.png)
+
 ## InstrumentStudio Panel
 
 ### Usage

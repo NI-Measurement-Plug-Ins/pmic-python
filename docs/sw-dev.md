@@ -11,7 +11,7 @@ Install the below packages from NIPM
 - NI-DCPower (2023 Q4 or higher)
 - NI-Scope (2023 Q4 or higher) (note: required for ripple)
 
-Install the below libraries with pip
+Install the below packages using pip:
 
 - ni-measurementlink-service
 - ni-measurementlink-generator
