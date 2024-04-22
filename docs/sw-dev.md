@@ -13,17 +13,17 @@ Install the below packages from NIPM
 
 Install the below libraries with pip
 
-- ni-measurementlink-generator library
-- ni-measurementlink-service library
-- ni-dcpower
-- ni-scope
+- ni-measurementlink-service
+- ni-measurementlink-generator
+- nidcpower
+- niscope
 
-refer [here](https://www.ni.com/docs/en-US/bundle/measurementlink/page/python-measurement-dependencies.html) for more information
+Refer to [this](https://www.ni.com/docs/en-US/bundle/measurementlink/page/python-measurement-dependencies.html) document for python measurement dependencies.
 
 ## Tested with:
 - Instrument Studio 2024 Q1
 - TestStand 2022 Q4
-- Semiconductor Device Control Add-On 2023 Q4 (if needed)
+- Semiconductor Device Control Add-On 2023 Q4
 
 ## Building NIPM packages
 To build NIPM packages for the measurement plugin, refer to [this](build-plugin.md) document.
