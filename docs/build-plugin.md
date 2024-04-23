@@ -18,9 +18,13 @@
 
    ![alt text](images/dist.png)
 
-5. Add service-config, start.bat and UI files in dist folder.
+5. Add service-config and UI files in dist folder and change folder and exe name accordingly.
 
    ![alt text](images/dist-folder.png)
+
+6. change path to exe file name in service-config file
+
+   ![alt text](images/service-config-change.png)
 
 
 Note: Please note that the /build and /dist folder must not be committed to repo and will be ignored by .gitignore upon commit.
