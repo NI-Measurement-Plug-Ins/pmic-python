@@ -1,0 +1,19 @@
+{
+  "services": [
+    {
+      "displayName": "Load Transient (Py)",
+      "serviceClass": "Load_Transient_PMIC_Python",
+      "descriptionUrl": "",
+      "providedInterfaces": [
+        "ni.measurementlink.measurement.v1.MeasurementService",
+        "ni.measurementlink.measurement.v2.MeasurementService"
+      ],
+      "path": "start.bat",
+      "annotations": {
+        "ni/service.description": "Load Transient measurement for PMIC",
+        "ni/service.collection": "PMIC",
+        "ni/service.tags": ["load transient", "PMIC"]
+      }
+    }
+  ]
+}
