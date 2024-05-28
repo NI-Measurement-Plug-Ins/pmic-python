@@ -1,0 +1,19 @@
+{
+  "services": [
+    {
+      "displayName": "Efficiency And Load Regulation (Py)",
+      "serviceClass": "EfficiencyAndLoadRegulation_PMIC_Python",
+      "descriptionUrl": "",
+      "providedInterfaces": [
+        "ni.measurementlink.measurement.v1.MeasurementService",
+        "ni.measurementlink.measurement.v2.MeasurementService"
+      ],
+      "path": "start.bat",
+      "annotations": {
+        "ni/service.description": "Efficiency and Load Regulation measurement for PMIC",
+        "ni/service.collection": "PMIC",
+        "ni/service.tags": ["efficiency and load regulation","pmic"]
+      }
+    }
+  ]
+}
