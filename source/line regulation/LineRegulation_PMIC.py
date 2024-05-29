@@ -35,7 +35,7 @@ measurement_service = nims.MeasurementService(
 @measurement_service.output('Load voltage vs source voltage', nims.DataType.DoubleXYData)
 @measurement_service.output('Load voltage dev vs source voltage', nims.DataType.DoubleXYData)
 @measurement_service.output('Load voltage (V)', nims.DataType.Double)
-@measurement_service.output('Load voltage deviation', nims.DataType.Double)
+@measurement_service.output('Load voltage deviation (%)', nims.DataType.Double)
 @measurement_service.output('DUT status', nims.DataType.String)
 def measure(
         mode_of_operation: Enum,
