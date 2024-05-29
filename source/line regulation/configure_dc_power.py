@@ -25,8 +25,8 @@ class SweepType(Enum):
 # function to take voltage and current levels and return status string
 def format_power_on_result(voltage_level: float, current_level: float) -> str:
     return (f'The DUT is powered ON\n'
-            f'Voltage Level: {voltage_level}\n'
-            f'Current Level: {current_level}')
+            f'Voltage Level: {round(voltage_level, 3)}\n'
+            f'Current Level: {round(current_level, 3)}')
 
 
 # function to generate series of values from start to stop in number of steps specified and SweepType
@@ -72,7 +72,7 @@ def generate_sequence(
 # function to determine current limit based on power boundary
 def get_current_limit(voltage_level: float, current_limit: float, power_limit: float) -> float:
     if voltage_level * current_limit > power_limit:
-        return power_limit / voltage_level
+        return round((power_limit / voltage_level), 3)
     return current_limit
 
 

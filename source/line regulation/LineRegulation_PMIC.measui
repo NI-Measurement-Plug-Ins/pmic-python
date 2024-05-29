@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SourceFile Checksum="585F2D7B59E83F8AC66D6765991618C8BB12AB1230C9097ADC75FE140724CC7D2A28627F9022848D74B7E8C086D4635906AB1F05E7491D445D8EA3DD10D56662" Timestamp="1DAB0B7EEA798DC" xmlns="http://www.ni.com/PlatformFramework">
+<SourceFile Checksum="B15BC640A177910A22E0C0C485548436CF314D67D54C0DBA940BD4DF74390DA52DACB45A4C752458C20E6F3CB22222DD59BDC6AF35A20D787B516321FB95449A" Timestamp="1DAB1A857D8CFA4" xmlns="http://www.ni.com/PlatformFramework">
 	<SourceModelFeatureSet>
-		<ParsableNamespace AssemblyFileVersion="9.13.0.1488" FeatureSetName="Configuration Based Software Core" Name="http://www.ni.com/ConfigurationBasedSoftware.Core" OldestCompatibleVersion="6.3.0.49152" Version="9.8.1.49152" />
-		<ParsableNamespace AssemblyFileVersion="9.13.0.1488" FeatureSetName="LabVIEW Controls" Name="http://www.ni.com/Controls.LabVIEW.Design" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
-		<ParsableNamespace AssemblyFileVersion="24.5.0.1488" FeatureSetName="InstrumentStudio Measurement UI" Name="http://www.ni.com/InstrumentFramework/ScreenDocument" OldestCompatibleVersion="22.1.0.1" Version="22.1.0.1" />
-		<ParsableNamespace AssemblyFileVersion="9.13.0.1488" FeatureSetName="Editor" Name="http://www.ni.com/PanelCommon" OldestCompatibleVersion="6.1.0.0" Version="6.1.0.49152" />
-		<ParsableNamespace AssemblyFileVersion="9.13.0.1488" FeatureSetName="Editor" Name="http://www.ni.com/PlatformFramework" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
-		<ApplicationVersionInfo Build="24.5.0.1488" Name="MeasurementLink UI Editor" Version="24.5.0.1488" />
+		<ParsableNamespace AssemblyFileVersion="9.11.0.49428" FeatureSetName="Configuration Based Software Core" Name="http://www.ni.com/ConfigurationBasedSoftware.Core" OldestCompatibleVersion="6.3.0.49152" Version="9.8.1.49152" />
+		<ParsableNamespace AssemblyFileVersion="9.11.0.49428" FeatureSetName="LabVIEW Controls" Name="http://www.ni.com/Controls.LabVIEW.Design" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
+		<ParsableNamespace AssemblyFileVersion="24.0.0.49428" FeatureSetName="InstrumentStudio Measurement UI" Name="http://www.ni.com/InstrumentFramework/ScreenDocument" OldestCompatibleVersion="22.1.0.1" Version="22.1.0.1" />
+		<ParsableNamespace AssemblyFileVersion="9.11.0.49428" FeatureSetName="Editor" Name="http://www.ni.com/PanelCommon" OldestCompatibleVersion="6.1.0.0" Version="6.1.0.49152" />
+		<ParsableNamespace AssemblyFileVersion="9.11.0.49428" FeatureSetName="Editor" Name="http://www.ni.com/PlatformFramework" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
+		<ApplicationVersionInfo Build="24.0.0.49428" Name="MeasurementLink UI Editor" Version="24.0.0.49428" />
 	</SourceModelFeatureSet>
 	<Screen ClientId="{c652bbf0-7148-496d-85fe-06653cd41eaf}" DisplayName="Line Regulation (Py)" Id="951ada7311244fc186690f66be50fe48" ServiceClass="Line Regulation_PMIC_Python" xmlns="http://www.ni.com/InstrumentFramework/ScreenDocument">
 		<ScreenSurface Height="[float]651" Id="98b2ef21e0a14a49bdce21ce0e6ffd5d" Left="[float]0" PanelSizeMode="Fixed" Top="[float]0" Width="[float]1303" xmlns="http://www.ni.com/ConfigurationBasedSoftware.Core">
@@ -148,8 +148,8 @@
 			</Label>
 			<ChannelNumericText AdaptsToType="[bool]True" BaseName="[string]Numeric" Channel="[string]{c652bbf0-7148-496d-85fe-06653cd41eaf}/Output/Load voltage (V)" Height="[float]24" Id="b4e6c79fff2740789a4e5c5636f51395" IsReadOnly="[bool]True" Label="[UIModel]13d70fcac925491f932e5a68b517c63c" Left="[float]83" RadixBase="[RadixBase]0" RadixVisibility="[SMVisibility]Collapsed" TabIndex="[int]11" Top="[float]605" UnitAnnotation="[string]" ValueFormatter="[string]DisplayFormat=SystemInternational:Digits=5:DigitDisplayType=SignificantDigits:MinimumFieldWidth=0:AlwaysShowSign=False:ShowThousandsSeparator=False" ValueType="[Type]Double" Width="[float]140" />
 			<Label Height="[float]16" Id="13d70fcac925491f932e5a68b517c63c" LabelOwner="[UIModel]b4e6c79fff2740789a4e5c5636f51395" Left="[float]83" Text="[string]Load voltage (V)" Top="[float]585" Width="[float]86" xmlns="http://www.ni.com/PanelCommon" />
-			<ChannelNumericText AdaptsToType="[bool]True" BaseName="[string]Numeric" Channel="[string]{c652bbf0-7148-496d-85fe-06653cd41eaf}/Output/Load voltage deviation (%)" Height="[float]24" Id="c0dbe3e44a5c4d6ebc04dc6c0801bfbc" IsReadOnly="[bool]True" Label="[UIModel]337895b328124e34bf6642a7ce004177" Left="[float]358" RadixBase="[RadixBase]0" RadixVisibility="[SMVisibility]Collapsed" TabIndex="[int]12" Top="[float]605" UnitAnnotation="[string]" ValueFormatter="[string]DisplayFormat=SystemInternational:Digits=5:DigitDisplayType=SignificantDigits:MinimumFieldWidth=0:AlwaysShowSign=False:ShowThousandsSeparator=False" ValueType="[Type]Double" Width="[float]140" />
-			<Label Height="[float]16" Id="337895b328124e34bf6642a7ce004177" LabelOwner="[UIModel]c0dbe3e44a5c4d6ebc04dc6c0801bfbc" Left="[float]358" Text="[string]Load voltage deviation (%)" Top="[float]585" Width="[float]141" xmlns="http://www.ni.com/PanelCommon" />
+			<ChannelNumericText AdaptsToType="[bool]True" BaseName="[string]Numeric" Channel="[string]{c652bbf0-7148-496d-85fe-06653cd41eaf}/Output/Load voltage deviation" Height="[float]24" Id="c0dbe3e44a5c4d6ebc04dc6c0801bfbc" IsReadOnly="[bool]True" Label="[UIModel]337895b328124e34bf6642a7ce004177" Left="[float]358" RadixBase="[RadixBase]0" RadixVisibility="[SMVisibility]Collapsed" TabIndex="[int]12" Top="[float]605" UnitAnnotation="[string]" ValueFormatter="[string]DisplayFormat=SystemInternational:Digits=5:DigitDisplayType=SignificantDigits:MinimumFieldWidth=0:AlwaysShowSign=False:ShowThousandsSeparator=False" ValueType="[Type]Double" Width="[float]140" />
+			<Label Height="[float]16" Id="337895b328124e34bf6642a7ce004177" LabelOwner="[UIModel]c0dbe3e44a5c4d6ebc04dc6c0801bfbc" Left="[float]358" Text="[string]Load voltage deviation" Top="[float]585" Width="[float]121" xmlns="http://www.ni.com/PanelCommon" />
 		</ScreenSurface>
 	</Screen>
 </SourceFile>
