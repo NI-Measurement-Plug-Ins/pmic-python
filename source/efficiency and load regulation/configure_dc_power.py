@@ -74,40 +74,14 @@ def generate_sequence(
 # function to determine current limit based on power boundary
 def get_current_limit(voltage_level: float, current_limit: float, power_limit: float) -> float:
     if voltage_level * current_limit > power_limit:
-        return power_limit / voltage_level
+        value = str(float(power_limit / voltage_level))
+        return float(value[:min(len(value), value.index('.')+4)])
     return current_limit
 
 
 # function to build terminal name
-def build_terminal_name(session: Session, channel_name: str, local_terminal_name: str) -> str:
-    model = session.instrument_model
-    resource_descriptor = session.io_resource_descriptor
-    resource_descriptor = resource_descriptor[:resource_descriptor.find('/')]
-
-    if model == 'NI PXIe-4151':
-        i = channel_name.find(resource_descriptor)
-        # get after matched sub-string portion of channel_name where sub-string is resource descriptor
-        channel_name = channel_name[(i + len(resource_descriptor)):]
-        # find first occurrence of a number in modified channel name
-        res = ''
-        j = 0
-        while j < len(channel_name):
-
-            if channel_name[j].isnumeric():
-                while j < len(channel_name) and channel_name[j].isnumeric():
-                    res += channel_name[j]
-                    j += 1
-                break
-            j += 1
-
-        return f'/{resource_descriptor}/Engine{res}/{local_terminal_name}'
-
-    elif model == 'NI PXI-4132':
-        return f'/{resource_descriptor}/{local_terminal_name}'
-
-    else:
-        return f'/{resource_descriptor}/Engine{channel_name[channel_name.find("/")+1:]}/{local_terminal_name}'
-    pass
+def build_trigger_terminal(resource_name: str, channel_name: str, event_name: str) -> str:
+    return f'/{resource_name}/Engine{channel_name}/{event_name}'
 
 
 # function to start source device and keep it in running state

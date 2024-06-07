@@ -137,8 +137,8 @@ def measure(
                 current_values,
                 load_voltage_limit_range,
                 aperture_time,
-                build_terminal_name(source_session, source_session.get_channel_name(1), 'SourceTrigger'),
-                build_terminal_name(source_session, source_session.get_channel_name(1), 'SourceCompleteEvent')
+                build_trigger_terminal(source_resource_name, source_device_channel, 'SourceTrigger'),
+                build_trigger_terminal(source_resource_name, source_device_channel, 'SourceCompleteEvent')
             )
 
             load_session.channels[load_device_channel].initiate()
