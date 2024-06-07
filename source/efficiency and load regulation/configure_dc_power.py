@@ -26,9 +26,11 @@ class SweepType(Enum):
 
 # function to take voltage and current levels and return status string
 def format_power_on_result(voltage_level: float, current_level: float) -> str:
-    return (f'The DUT is powered ON\n'
-            f'Voltage Level: {voltage_level}\n'
-            f'Current Level: {current_level}')
+    voltage_string = str(voltage_level)
+    current_string = str(current_level)
+    return (f"The DUT is powered ON\n"
+            f"Voltage Level: {voltage_string[:min(len(voltage_string), voltage_string.index('.')+4)]}\n"
+            f"Current Level: {current_string[:min(len(current_string), voltage_string.index('.')+4)]}")
 
 
 # function to generate series of values from start to stop in number of steps specified and SweepType
@@ -259,7 +261,7 @@ def configure_source(
     return
 
 
-# function to configure source for perform measurement
+# function to configure load for perform measurement
 def configure_load(
         session: Session,
         channel_name: str,
@@ -269,7 +271,7 @@ def configure_load(
         source_terminal_name: str,
         measure_terminal_name: str
 ) -> None:
-    # configure the source session
+    # configure the load session
     session.channels[channel_name].sense = Sense.REMOTE
     session.channels[channel_name].source_mode = SourceMode.SEQUENCE
     session.channels[channel_name].output_function = OutputFunction.DC_CURRENT

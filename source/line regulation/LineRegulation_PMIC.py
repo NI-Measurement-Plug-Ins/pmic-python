@@ -17,11 +17,15 @@ measurement_service = nims.MeasurementService(
 
 
 @measurement_service.register_measurement
+# On-Off feature
 @measurement_service.configuration('Mode of operation', nims.DataType.Enum, ModeOfOperation.PerformMeasurement, enum_type=ModeOfOperation)
+# Measurement Settings
 @measurement_service.configuration('DUT setup time (s)', nims.DataType.Double, 1.0)
 @measurement_service.configuration('Source delay (s)', nims.DataType.Double, 0.005)
+# Aperture time is the period during which an ADC reads the voltage or current on a power supply or SMU
 @measurement_service.configuration('Aperture time (s)', nims.DataType.Double, 0.005)
 @measurement_service.configuration('Nominal output voltage (V)', nims.DataType.Double, 3.3)
+# Source Settings
 @measurement_service.configuration('Source resource name', nims.DataType.String, 'PPS')
 @measurement_service.configuration('Source current limit (A)', nims.DataType.Double, 25.0)
 @measurement_service.configuration('Sweep type', nims.DataType.Enum, SweepType.Linear, enum_type=SweepType)
@@ -29,9 +33,11 @@ measurement_service = nims.MeasurementService(
 @measurement_service.configuration('Source start voltage (V)', nims.DataType.Double, 6.0)
 @measurement_service.configuration('Source stop voltage (V)', nims.DataType.Double, 20.0)
 @measurement_service.configuration('Pts/Pts per decade', nims.DataType.Int32, 10)
+# Load Settings
 @measurement_service.configuration('Load resource name', nims.DataType.String, 'E-load')
 @measurement_service.configuration('Load current level (A)', nims.DataType.Double, 1.0)
 @measurement_service.configuration('Load voltage limit range (V)', nims.DataType.Double, 5.0)
+# configure outputs
 @measurement_service.output('Load voltage vs source voltage', nims.DataType.DoubleXYData)
 @measurement_service.output('Load voltage dev vs source voltage', nims.DataType.DoubleXYData)
 @measurement_service.output('Load voltage (V)', nims.DataType.Double)

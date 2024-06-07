@@ -17,23 +17,29 @@ measurement_service = nims.MeasurementService(
 
 
 @measurement_service.register_measurement
+# On-Off feature
 @measurement_service.configuration('Mode of operation', nims.DataType.Enum, ModeOfOperation.PerformMeasurement, enum_type=ModeOfOperation)
+# Measurement Settings
 @measurement_service.configuration('DUT setup time', nims.DataType.Double, 1.0)
 @measurement_service.configuration('Source delay', nims.DataType.Double, 0.005)
+# Aperture time is the period during which an ADC reads the voltage or current on a power supply or SMU
 @measurement_service.configuration('Aperture time', nims.DataType.Double, 0.005)
 @measurement_service.configuration('Nominal output voltage', nims.DataType.Double, 3.3)
+# Source Settings
 @measurement_service.configuration('Source resource name', nims.DataType.String, 'PPS')
 @measurement_service.configuration('Source current limit', nims.DataType.Double, 25.0)
 @measurement_service.configuration('Source maximum power', nims.DataType.Double, 300.0)
 @measurement_service.configuration('Source start voltage', nims.DataType.Double, 6.0)
 @measurement_service.configuration('Source stop voltage', nims.DataType.Double, 20.0)
 @measurement_service.configuration('Source voltage sweep points', nims.DataType.Int32, 4)
+# Load Settings
 @measurement_service.configuration('Load resource name', nims.DataType.String, 'E-load')
 @measurement_service.configuration('Load voltage limit range', nims.DataType.Double, 5.0)
 @measurement_service.configuration('Load sweep type', nims.DataType.String, 'Linear')
 @measurement_service.configuration('Load start current', nims.DataType.Double, 0.1)
 @measurement_service.configuration('Load stop current', nims.DataType.Double, 24.0)
 @measurement_service.configuration('Load current sweep points/points per decade', nims.DataType.Int32, 10)
+# configure outputs
 @measurement_service.output('Status', nims.DataType.String)
 @measurement_service.output('Voltage values', nims.DataType.DoubleArray1D)
 @measurement_service.output('Source sweep points', nims.DataType.Int32)
