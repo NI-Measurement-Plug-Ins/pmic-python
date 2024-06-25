@@ -8,6 +8,7 @@
 
    - Output Voltage Accuracy
    - Ripple
+   - Load Transient Response
 
 Click here for a detailed list of measurements and their functionality: [Measurement List](docs/measurements/meas-index.md)
 
