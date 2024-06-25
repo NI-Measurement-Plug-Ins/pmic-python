@@ -3,43 +3,79 @@
     <SourceItems>
         <SourceItem z:Id="i2">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC\Output Voltage Accuracy_Py_PMIC.exe</RelativePath>
+            <RelativePath>..\builds\Efficiency And Load Regulation_Py_PMIC\Efficiency And Load Regulation_Py_PMIC.exe</RelativePath>
             <DependentItems />
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
         <SourceItem z:Id="i3">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.measui</RelativePath>
+            <RelativePath>..\builds\Efficiency And Load Regulation_Py_PMIC\EfficiencyAndLoadRegulation_PMIC.serviceconfig</RelativePath>
             <DependentItems />
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
         <SourceItem z:Id="i4">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.serviceconfig</RelativePath>
+            <RelativePath>..\builds\Efficiency And Load Regulation_Py_PMIC\EfficiencyAndLoadRegulation_PMIC.vi</RelativePath>
             <DependentItems />
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
         <SourceItem z:Id="i5">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Ripple_Py_PMIC\Ripple_PMIC.measui</RelativePath>
+            <RelativePath>..\builds\Line Regulation_Py_PMIC\Line Regulation_Py_PMIC.exe</RelativePath>
             <DependentItems />
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
         <SourceItem z:Id="i6">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Ripple_Py_PMIC\Ripple_PMIC.serviceconfig</RelativePath>
+            <RelativePath>..\builds\Line Regulation_Py_PMIC\LineRegulation_PMIC.measui</RelativePath>
             <DependentItems />
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
         <SourceItem z:Id="i7">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Ripple_Py_PMIC\Ripple_Py_PMIC.exe</RelativePath>
+            <RelativePath>..\builds\Line Regulation_Py_PMIC\LineRegulation_PMIC.serviceconfig</RelativePath>
             <DependentItems />
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
         <SourceItem z:Id="i8">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC</RelativePath>
+            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC\Output Voltage Accuracy_Py_PMIC.exe</RelativePath>
+            <DependentItems />
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i9">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.measui</RelativePath>
+            <DependentItems />
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i10">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.serviceconfig</RelativePath>
+            <DependentItems />
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i11">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds\Ripple_Py_PMIC\Ripple_PMIC.measui</RelativePath>
+            <DependentItems />
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i12">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds\Ripple_Py_PMIC\Ripple_PMIC.serviceconfig</RelativePath>
+            <DependentItems />
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i13">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds\Ripple_Py_PMIC\Ripple_Py_PMIC.exe</RelativePath>
+            <DependentItems />
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i14">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds\Efficiency And Load Regulation_Py_PMIC</RelativePath>
             <DependentItems>
                 <SourceItem z:Ref="i2" />
                 <SourceItem z:Ref="i3" />
@@ -47,9 +83,9 @@
             </DependentItems>
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
-        <SourceItem z:Id="i9">
+        <SourceItem z:Id="i15">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds\Ripple_Py_PMIC</RelativePath>
+            <RelativePath>..\builds\Line Regulation_Py_PMIC</RelativePath>
             <DependentItems>
                 <SourceItem z:Ref="i5" />
                 <SourceItem z:Ref="i6" />
@@ -57,91 +93,165 @@
             </DependentItems>
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
-        <SourceItem z:Id="i10">
+        <SourceItem z:Id="i16">
             <PluginConfigurationOptions />
-            <RelativePath>..\builds</RelativePath>
+            <RelativePath>..\builds\Output Voltage Accuracy_Py_PMIC</RelativePath>
             <DependentItems>
                 <SourceItem z:Ref="i8" />
                 <SourceItem z:Ref="i9" />
+                <SourceItem z:Ref="i10" />
+            </DependentItems>
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i17">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds\Ripple_Py_PMIC</RelativePath>
+            <DependentItems>
+                <SourceItem z:Ref="i11" />
+                <SourceItem z:Ref="i12" />
+                <SourceItem z:Ref="i13" />
+            </DependentItems>
+            <IsDiscoverable>true</IsDiscoverable>
+        </SourceItem>
+        <SourceItem z:Id="i18">
+            <PluginConfigurationOptions />
+            <RelativePath>..\builds</RelativePath>
+            <DependentItems>
+                <SourceItem z:Ref="i14" />
+                <SourceItem z:Ref="i15" />
+                <SourceItem z:Ref="i16" />
+                <SourceItem z:Ref="i17" />
             </DependentItems>
             <IsDiscoverable>true</IsDiscoverable>
         </SourceItem>
     </SourceItems>
     <InputSourceItems>
-        <SourceItem z:Ref="i10" />
+        <SourceItem z:Ref="i18" />
     </InputSourceItems>
     <Distributions>
-        <Distribution z:Id="i11" i:type="Package">
+        <Distribution z:Id="i19" i:type="Package">
             <DistributionItems>
-                <DistributionItem z:Id="i12" i:type="DistributionDirectoryItem">
+                <DistributionItem z:Id="i20" i:type="DistributionDirectoryItem">
                     <DestinationRelativePath>[ProgramData]\National Instruments</DestinationRelativePath>
                     <Name>National Instruments</Name>
                     <SourceItem i:nil="true" />
                 </DistributionItem>
-                <DistributionItem z:Id="i13" i:type="DistributionDirectoryItem">
+                <DistributionItem z:Id="i21" i:type="DistributionDirectoryItem">
                     <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink</DestinationRelativePath>
                     <Name>MeasurementLink</Name>
                     <SourceItem i:nil="true" />
                 </DistributionItem>
-                <DistributionItem z:Id="i14" i:type="DistributionDirectoryItem">
+                <DistributionItem z:Id="i22" i:type="DistributionDirectoryItem">
                     <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services</DestinationRelativePath>
                     <Name>Services</Name>
                     <SourceItem i:nil="true" />
                 </DistributionItem>
-                <DistributionItem z:Id="i15" i:type="DistributionDirectoryItem">
+                <DistributionItem z:Id="i23" i:type="DistributionDirectoryItem">
                     <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC</DestinationRelativePath>
                     <Name>PMIC</Name>
                     <SourceItem i:nil="true" />
                 </DistributionItem>
-                <DistributionItem z:Id="i16" i:type="DistributionDirectoryItem">
-                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC</DestinationRelativePath>
-                    <Name>Output Voltage Accuracy_Py_PMIC</Name>
+                <DistributionItem z:Id="i24" i:type="DistributionDirectoryItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Efficiency And Load Regulation_Py_PMIC</DestinationRelativePath>
+                    <Name>Efficiency And Load Regulation_Py_PMIC</Name>
                     <SourceItem i:nil="true" />
                 </DistributionItem>
-                <DistributionItem z:Id="i17" i:type="DistributionFileItem">
-                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC\Output Voltage Accuracy_Py_PMIC.exe</DestinationRelativePath>
-                    <Name>Output Voltage Accuracy_Py_PMIC.exe</Name>
+                <DistributionItem z:Id="i25" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Efficiency And Load Regulation_Py_PMIC\Efficiency And Load Regulation_Py_PMIC.exe</DestinationRelativePath>
+                    <Name>Efficiency And Load Regulation_Py_PMIC.exe</Name>
                     <SourceItem z:Ref="i2" />
                     <PluginConfigurationOptions />
                     <ProcessDuringStaging>true</ProcessDuringStaging>
                 </DistributionItem>
-                <DistributionItem z:Id="i18" i:type="DistributionFileItem">
-                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.measui</DestinationRelativePath>
-                    <Name>OutputVoltageAccuracy_PMIC.measui</Name>
+                <DistributionItem z:Id="i26" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Efficiency And Load Regulation_Py_PMIC\EfficiencyAndLoadRegulation_PMIC.serviceconfig</DestinationRelativePath>
+                    <Name>EfficiencyAndLoadRegulation_PMIC.serviceconfig</Name>
                     <SourceItem z:Ref="i3" />
                     <PluginConfigurationOptions />
                     <ProcessDuringStaging>true</ProcessDuringStaging>
                 </DistributionItem>
-                <DistributionItem z:Id="i19" i:type="DistributionFileItem">
-                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.serviceconfig</DestinationRelativePath>
-                    <Name>OutputVoltageAccuracy_PMIC.serviceconfig</Name>
+                <DistributionItem z:Id="i27" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Efficiency And Load Regulation_Py_PMIC\EfficiencyAndLoadRegulation_PMIC.vi</DestinationRelativePath>
+                    <Name>EfficiencyAndLoadRegulation_PMIC.vi</Name>
                     <SourceItem z:Ref="i4" />
                     <PluginConfigurationOptions />
                     <ProcessDuringStaging>true</ProcessDuringStaging>
                 </DistributionItem>
-                <DistributionItem z:Id="i20" i:type="DistributionDirectoryItem">
-                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Ripple_Py_PMIC</DestinationRelativePath>
-                    <Name>Ripple_Py_PMIC</Name>
+                <DistributionItem z:Id="i28" i:type="DistributionDirectoryItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Line Regulation_Py_PMIC</DestinationRelativePath>
+                    <Name>Line Regulation_Py_PMIC</Name>
                     <SourceItem i:nil="true" />
                 </DistributionItem>
-                <DistributionItem z:Id="i21" i:type="DistributionFileItem">
-                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Ripple_Py_PMIC\Ripple_PMIC.measui</DestinationRelativePath>
-                    <Name>Ripple_PMIC.measui</Name>
+                <DistributionItem z:Id="i29" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Line Regulation_Py_PMIC\Line Regulation_Py_PMIC.exe</DestinationRelativePath>
+                    <Name>Line Regulation_Py_PMIC.exe</Name>
                     <SourceItem z:Ref="i5" />
                     <PluginConfigurationOptions />
                     <ProcessDuringStaging>true</ProcessDuringStaging>
                 </DistributionItem>
-                <DistributionItem z:Id="i22" i:type="DistributionFileItem">
-                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Ripple_Py_PMIC\Ripple_PMIC.serviceconfig</DestinationRelativePath>
-                    <Name>Ripple_PMIC.serviceconfig</Name>
+                <DistributionItem z:Id="i30" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Line Regulation_Py_PMIC\LineRegulation_PMIC.measui</DestinationRelativePath>
+                    <Name>LineRegulation_PMIC.measui</Name>
                     <SourceItem z:Ref="i6" />
                     <PluginConfigurationOptions />
                     <ProcessDuringStaging>true</ProcessDuringStaging>
                 </DistributionItem>
-                <DistributionItem z:Id="i23" i:type="DistributionFileItem">
+                <DistributionItem z:Id="i31" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Line Regulation_Py_PMIC\LineRegulation_PMIC.serviceconfig</DestinationRelativePath>
+                    <Name>LineRegulation_PMIC.serviceconfig</Name>
+                    <SourceItem z:Ref="i7" />
+                    <PluginConfigurationOptions />
+                    <ProcessDuringStaging>true</ProcessDuringStaging>
+                </DistributionItem>
+                <DistributionItem z:Id="i32" i:type="DistributionDirectoryItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC</DestinationRelativePath>
+                    <Name>Output Voltage Accuracy_Py_PMIC</Name>
+                    <SourceItem i:nil="true" />
+                </DistributionItem>
+                <DistributionItem z:Id="i33" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC\Output Voltage Accuracy_Py_PMIC.exe</DestinationRelativePath>
+                    <Name>Output Voltage Accuracy_Py_PMIC.exe</Name>
+                    <SourceItem z:Ref="i8" />
+                    <PluginConfigurationOptions />
+                    <ProcessDuringStaging>true</ProcessDuringStaging>
+                </DistributionItem>
+                <DistributionItem z:Id="i34" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.measui</DestinationRelativePath>
+                    <Name>OutputVoltageAccuracy_PMIC.measui</Name>
+                    <SourceItem z:Ref="i9" />
+                    <PluginConfigurationOptions />
+                    <ProcessDuringStaging>true</ProcessDuringStaging>
+                </DistributionItem>
+                <DistributionItem z:Id="i35" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Output Voltage Accuracy_Py_PMIC\OutputVoltageAccuracy_PMIC.serviceconfig</DestinationRelativePath>
+                    <Name>OutputVoltageAccuracy_PMIC.serviceconfig</Name>
+                    <SourceItem z:Ref="i10" />
+                    <PluginConfigurationOptions />
+                    <ProcessDuringStaging>true</ProcessDuringStaging>
+                </DistributionItem>
+                <DistributionItem z:Id="i36" i:type="DistributionDirectoryItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Ripple_Py_PMIC</DestinationRelativePath>
+                    <Name>Ripple_Py_PMIC</Name>
+                    <SourceItem i:nil="true" />
+                </DistributionItem>
+                <DistributionItem z:Id="i37" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Ripple_Py_PMIC\Ripple_PMIC.measui</DestinationRelativePath>
+                    <Name>Ripple_PMIC.measui</Name>
+                    <SourceItem z:Ref="i11" />
+                    <PluginConfigurationOptions />
+                    <ProcessDuringStaging>true</ProcessDuringStaging>
+                </DistributionItem>
+                <DistributionItem z:Id="i38" i:type="DistributionFileItem">
+                    <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Ripple_Py_PMIC\Ripple_PMIC.serviceconfig</DestinationRelativePath>
+                    <Name>Ripple_PMIC.serviceconfig</Name>
+                    <SourceItem z:Ref="i12" />
+                    <PluginConfigurationOptions />
+                    <ProcessDuringStaging>true</ProcessDuringStaging>
+                </DistributionItem>
+                <DistributionItem z:Id="i39" i:type="DistributionFileItem">
                     <DestinationRelativePath>[ProgramData]\National Instruments\MeasurementLink\Services\PMIC\Ripple_Py_PMIC\Ripple_Py_PMIC.exe</DestinationRelativePath>
                     <Name>Ripple_Py_PMIC.exe</Name>
-                    <SourceItem z:Ref="i7" />
+                    <SourceItem z:Ref="i13" />
                     <PluginConfigurationOptions />
                     <ProcessDuringStaging>true</ProcessDuringStaging>
                 </DistributionItem>
@@ -152,7 +262,7 @@
             <PrebuildAnalysisEnabled>true</PrebuildAnalysisEnabled>
             <Architecture>windows_x64</Architecture>
             <AutoIncrementVersion>Build</AutoIncrementVersion>
-            <BuildStatus z:Id="i24">
+            <BuildStatus z:Id="i40">
                 <BuildEverSuccessful>true</BuildEverSuccessful>
                 <FileName>community-pmic-python_1.0.0.0_windows_x64.nipkg</FileName>
                 <Version>1.0.0.0</Version>
@@ -178,9 +288,9 @@
     </Distributions>
     <Feeds />
     <DistributionGroups>
-        <DistributionGroup z:Id="i25">
+        <DistributionGroup z:Id="i41">
             <Distributions>
-                <Distribution z:Ref="i11" />
+                <Distribution z:Ref="i19" />
             </Distributions>
             <Name>Distribution Group</Name>
             <PrebuildAnalysisEnabled>true</PrebuildAnalysisEnabled>
@@ -188,62 +298,5 @@
         </DistributionGroup>
     </DistributionGroups>
     <TestStandMode>true</TestStandMode>
-    <PluginConfigurationOptions>
-        <ConfigurationOption z:Id="i26">
-            <Definition z:Id="i27">
-                <Description i:nil="true" />
-                <Name>TestStand Options</Name>
-            </Definition>
-            <HasDefaultValues>true</HasDefaultValues>
-            <Value z:Id="i28" i:type="DialogConfigurationOptionValue">
-                <Values>
-                    <ConfigurationOptionValue z:Id="i29" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i30" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i31" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i32" i:type="StringConfigurationOptionValue">
-                        <Value />
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i33" i:type="StringConfigurationOptionValue">
-                        <Value>SupportVIs</Value>
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i34" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i35" i:type="StringConfigurationOptionValue">
-                        <Value />
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i36" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i37" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i38" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i39" i:type="BooleanConfigurationOptionValue">
-                        <Value>true</Value>
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i40" i:type="BooleanConfigurationOptionValue">
-                        <Value>true</Value>
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i41" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i42" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i43" i:type="PathConfigurationOptionValue">
-                        <RelativePath />
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i44" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i45" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i46" i:type="StringConfigurationOptionValue">
-                        <Value>[BootVolume]</Value>
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i47" i:type="StringConfigurationOptionValue">
-                        <Value />
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i48" i:type="StringConfigurationOptionValue">
-                        <Value />
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i49" i:type="StringConfigurationOptionValue">
-                        <Value />
-                    </ConfigurationOptionValue>
-                    <ConfigurationOptionValue z:Id="i50" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i51" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i52" i:type="BooleanConfigurationOptionValue" />
-                    <ConfigurationOptionValue z:Id="i53" i:type="BooleanConfigurationOptionValue" />
-                </Values>
-            </Value>
-        </ConfigurationOption>
-    </PluginConfigurationOptions>
+    <PluginConfigurationOptions />
 </Solution>
