@@ -39,12 +39,13 @@ def generate_sequence(
         with_end_points: bool = True
 ) -> list[float]:
     res = []
-    if start >= stop or steps <= 0:
+    if start > stop or steps <= 0:
         return res
 
     if sweep_type == SweepType.Linear:
         if with_end_points:
-            d = (stop - start) / (steps - 1)
+            if (steps-1==0): d=0
+            else: d = (stop - start) / (steps - 1)
             for i in range(steps):
                 res.append((start + (i * d)))
             return res
@@ -55,7 +56,7 @@ def generate_sequence(
             return res
     else:
         if with_end_points:
-            r = 10 ** (1 / (steps - 1))
+            r = 10 ** (1 / (steps))
             while True:
                 res.append(start * (r ** len(res)))
                 if res[-1] >= stop:
