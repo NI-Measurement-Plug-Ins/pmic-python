@@ -58,15 +58,15 @@ def generate_sequence(
             r = 10 ** (1 / (steps - 1))
             while True:
                 res.append(start * (r ** len(res)))
-                if res[-1] > stop:
-                    res.pop()
+                if res[-1] >= stop:
+                    res[-1] = stop
                     return res
         else:
             r = 10 ** (1 / (steps + 1))
             while True:
                 res.append(start * (r ** len(res)))
-                if res[-1] > stop:
-                    res.pop()
+                if res[-1] >= stop:
+                    res[-1] = stop
                     return res
     pass
 
