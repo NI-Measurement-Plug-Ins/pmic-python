@@ -39,20 +39,24 @@ Note: Please note that the /build and /dist folder must not be committed to repo
     
     ![alt text](images/nipb-package-properties.png)
 
-3. In the Inputs tab, ensure the 'builds' folder is loaded with all measurement EXEs. 
+3. When using LabVIEW UI for the measurements, ensure LabVIEW Run Time Engine is added as a dependency. If not, add it by right clicking on package name and selecting 'Add Dependencies'.
+    
+    ![alt text](images/add-dependencies.png)
+
+4. In the Inputs tab, ensure the 'builds' folder is loaded with all measurement EXEs. 
 
     ![alt text](images/nipb-inputs-tab.png)
 
-4. Ensure the destination for the package installation is set to the below location:
+5. Ensure the destination for the package installation is set to the below location:
     "C:\ProgramData\National Instruments\MeasurementLink\Services"
 
     ![alt text](images/nipb-destinations.png)
 
-5. Click on 'Build Solution' icon.
+6. Click on 'Build Solution' icon.
 
     ![alt text](images/nipb-build-solution.png)
 
-6. Once the build process is complete, you should be able to see a new version of package created in Package folder parallel to build spec.
+7. Once the build process is complete, you should be able to see a new version of package created in Package folder parallel to build spec.
     
     **Package Folder:**
    

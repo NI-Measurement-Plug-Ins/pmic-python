@@ -8,6 +8,8 @@
 
    - Output Voltage Accuracy
    - Ripple
+   - Line Regulation
+   - Efficiency and Load Regulation
 
 Click here for a detailed list of measurements and their functionality: [Measurement List](docs/measurements/meas-index.md)
 
