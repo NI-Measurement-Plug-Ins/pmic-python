@@ -271,24 +271,33 @@
             <CustomExecutes />
             <Description>Measurements for PMIC using MeasurementLink</Description>
             <DisplayName>PMIC MeasurementLink Plug-In (Python)</DisplayName>
-            <FileName>community-pmic-python_1.0.0.2_windows_x64.nipkg</FileName>
+            <FileName>community-pmic-python_1.0.0.3_windows_x64.nipkg</FileName>
             <Homepage>https://github.com/NI-MeasurementLink-Plug-Ins/pmic-python</Homepage>
             <MaintainerEmail>email@mycompany.com</MaintainerEmail>
             <MaintainerName>GitHub Community</MaintainerName>
             <Messages xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
             <PackageName>community-pmic-python</PackageName>
-            <PackageRelationships />
+            <PackageRelationships>
+                <PackageRelationship z:Id="i41">
+                    <Constraint>LaterOrEqual</Constraint>
+                    <DisplayName>LabVIEW Runtime (64-bit)</DisplayName>
+                    <PackageName>ni-labview-2021-runtime-engine</PackageName>
+                    <Relation>Depends</Relation>
+                    <Version>21.1.2.49154-0+f2</Version>
+                    <VersionType>AutoUpdate</VersionType>
+                </PackageRelationship>
+            </PackageRelationships>
             <ProductName>MyProduct</ProductName>
             <ReleaseNotes>Supports Efficiency and Load Regulation, Line Regulation, Output Voltage Accuracy and Ripple Measurements</ReleaseNotes>
             <Section>Add-Ons</Section>
             <StoreProduct>true</StoreProduct>
             <Synopsis>community-pmic-python</Synopsis>
-            <Version>1.0.0.2</Version>
+            <Version>1.0.0.3</Version>
         </Distribution>
     </Distributions>
     <Feeds />
     <DistributionGroups>
-        <DistributionGroup z:Id="i41">
+        <DistributionGroup z:Id="i42">
             <Distributions>
                 <Distribution z:Ref="i19" />
             </Distributions>
@@ -298,5 +307,62 @@
         </DistributionGroup>
     </DistributionGroups>
     <TestStandMode>true</TestStandMode>
-    <PluginConfigurationOptions />
+    <PluginConfigurationOptions>
+        <ConfigurationOption z:Id="i43">
+            <Definition z:Id="i44">
+                <Description i:nil="true" />
+                <Name>TestStand Options</Name>
+            </Definition>
+            <HasDefaultValues>true</HasDefaultValues>
+            <Value z:Id="i45" i:type="DialogConfigurationOptionValue">
+                <Values>
+                    <ConfigurationOptionValue z:Id="i46" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i47" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i48" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i49" i:type="StringConfigurationOptionValue">
+                        <Value />
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i50" i:type="StringConfigurationOptionValue">
+                        <Value>SupportVIs</Value>
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i51" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i52" i:type="StringConfigurationOptionValue">
+                        <Value />
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i53" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i54" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i55" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i56" i:type="BooleanConfigurationOptionValue">
+                        <Value>true</Value>
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i57" i:type="BooleanConfigurationOptionValue">
+                        <Value>true</Value>
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i58" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i59" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i60" i:type="PathConfigurationOptionValue">
+                        <RelativePath />
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i61" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i62" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i63" i:type="StringConfigurationOptionValue">
+                        <Value>[BootVolume]</Value>
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i64" i:type="StringConfigurationOptionValue">
+                        <Value />
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i65" i:type="StringConfigurationOptionValue">
+                        <Value />
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i66" i:type="StringConfigurationOptionValue">
+                        <Value />
+                    </ConfigurationOptionValue>
+                    <ConfigurationOptionValue z:Id="i67" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i68" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i69" i:type="BooleanConfigurationOptionValue" />
+                    <ConfigurationOptionValue z:Id="i70" i:type="BooleanConfigurationOptionValue" />
+                </Values>
+            </Value>
+        </ConfigurationOption>
+    </PluginConfigurationOptions>
 </Solution>
