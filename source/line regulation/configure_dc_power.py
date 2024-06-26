@@ -53,7 +53,7 @@ def generate_sequence(
             d = (stop - start) / (steps + 1)
             for i in range(steps + 2):
                 res.append((start + (i * d)))
-            return res
+            return res[1:-1]
     else:
         if with_end_points:
             r = 10 ** (1 / (steps))
@@ -68,7 +68,7 @@ def generate_sequence(
                 res.append(start * (r ** len(res)))
                 if res[-1] >= stop:
                     res[-1] = stop
-                    return res
+                    return res[1:-1]
     pass
 
 
