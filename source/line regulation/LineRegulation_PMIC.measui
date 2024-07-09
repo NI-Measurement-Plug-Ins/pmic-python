@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SourceFile Checksum="C036CA2DEFD6F896E45C58B3354E2ACB9001E2CC18CD6057ED1F9BC6F3BD9274B2F91E3FC81FEB4A0C4216A09FC11E78FC6DAA6696F1D853210541BC53E6398C" Timestamp="1DAD1CFADDE1AD7" xmlns="http://www.ni.com/PlatformFramework">
+<SourceFile Checksum="E1614C8978650045BE957B0E93E96AE19D3FB825121ABA63331CA8D87102958B9F127E046010472ACCD32BBC7DAC78254A50FFA87192E41311E26EEB67754BD8" Timestamp="1DAD1E8C7DE5725" xmlns="http://www.ni.com/PlatformFramework">
 	<SourceModelFeatureSet>
 		<ParsableNamespace AssemblyFileVersion="9.11.0.49428" FeatureSetName="Configuration Based Software Core" Name="http://www.ni.com/ConfigurationBasedSoftware.Core" OldestCompatibleVersion="6.3.0.49152" Version="9.8.1.49152" />
 		<ParsableNamespace AssemblyFileVersion="9.11.0.49428" FeatureSetName="LabVIEW Controls" Name="http://www.ni.com/Controls.LabVIEW.Design" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
@@ -61,8 +61,8 @@
 				<TabItem Header="[string]Line Regulation (V/V)" Id="6c22418422264fab8cc311153cedbb74" Left="[float]0" Top="[float]0">
 					<Canvas Height="[float]514" Id="672d53dda46c451d9cb3d4d9645a3ee2" Left="[float]5" Top="[float]30" Width="[float]874" xmlns="http://www.ni.com/PlatformFramework">
 						<ArrayGraph Background="[SMSolidColorBrush]#00000000" BaseName="[string]Array Graph" Height="[float]513" Id="efc44dfa48db44548a518abe70fd1da4" IsAntiAliased="[bool]True" Label="[UIModel]cc5db76ece1c4dfead9019530fde3e23" Left="[float]0" MinWidth="[float]230" PlotAreaMargin="[SMThickness]66,26,10,49" PreferIndexData="[bool]False" RenderMode="[RenderMode]Hardware" SuppressScaleLayout="[bool]False" Top="[float]0" Width="[float]874" xmlns="http://www.ni.com/ConfigurationBasedSoftware.Core">
-							<ArrayGraphAxis Adjuster="[RangeAdjuster]FitExactly" ContentFont="d314591d84d44bb799b28cfa3a71db1a" DisableMappingChanges="[bool]False" Id="38b7e26cc0994895a49c34e108bbbd7b" Label="[string]Source Voltage(V)" LabelFont="6cdac5f676ed46738c27b9a6dbdabcba" LabelVisibility="[SMVisibility]Visible" MajorDivisions="[UIModel]f902cfd75b2349988db370788d329b6c" MinorTickVisibility="[SMVisibility]Collapsed" Orientation="[SMOrientation]Horizontal" Range="[IRange]1, 100, System.Double" ScaleKind="[RangeScaleKind]LogarithmBase10" ValueType="[Type]Double">
-								<RangeLabeledDivisions Id="f902cfd75b2349988db370788d329b6c" xmlns="http://www.ni.com/Controls.LabVIEW.Design">
+							<ArrayGraphAxis Adjuster="[RangeAdjuster]FitExactly" ContentFont="d314591d84d44bb799b28cfa3a71db1a" DisableMappingChanges="[bool]False" Id="38b7e26cc0994895a49c34e108bbbd7b" Label="[string]Source Voltage(V)" LabelFont="6cdac5f676ed46738c27b9a6dbdabcba" LabelVisibility="[SMVisibility]Visible" MajorDivisions="[UIModel]f902cfd75b2349988db370788d329b6c" MinorTickVisibility="[SMVisibility]Visible" Orientation="[SMOrientation]Horizontal" Range="[IRange]0.01, 100, System.Double" ScaleKind="[RangeScaleKind]LogarithmBase10" ValueType="[Type]Double">
+								<RangeLabeledDivisions Id="f902cfd75b2349988db370788d329b6c" TickVisibility="[SMVisibility]Visible" xmlns="http://www.ni.com/Controls.LabVIEW.Design">
 									<p.LabelPresenter Format="G6" />
 								</RangeLabeledDivisions>
 								<FontSetting FontFamily="Segoe UI" FontSize="9" Id="d314591d84d44bb799b28cfa3a71db1a" xmlns="http://www.ni.com/PlatformFramework" />
@@ -73,7 +73,7 @@
 								<FontSetting FontFamily="Segoe UI" FontSize="12" Id="d2925bb80ad24767b489921e2ab5951e" xmlns="http://www.ni.com/PlatformFramework" />
 							</ArrayGraphAxis>
 							<HmiGraphPlot Channel="[string]{c652bbf0-7148-496d-85fe-06653cd41eaf}/Output/Load voltage vs source voltage" HorizontalScale="[UIModel]38b7e26cc0994895a49c34e108bbbd7b" Id="a7d149b48da8461b80ba429a4e359608" IsDefaultPlot="[bool]False" Label="[string]Load voltage vs source voltage" VerticalScale="[UIModel]ba82b29159b44b49895f5a2d452e7cb6">
-								<PlotRenderer Id="2c1b98be567341acacfcfa2777799d20" LineStroke="[SMSolidColorBrush]#fffff200" LineThickness="[double]1" PointFill="[SMSolidColorBrush]#fffff200" xmlns="http://www.ni.com/Controls.LabVIEW.Design" />
+								<PlotRenderer Id="2c1b98be567341acacfcfa2777799d20" LineStroke="[SMSolidColorBrush]#ffee1c25" LineThickness="[double]1" PointFill="[SMSolidColorBrush]#ffee1c25" xmlns="http://www.ni.com/Controls.LabVIEW.Design" />
 							</HmiGraphPlot>
 							<PlotRenderer AreaBaseline="[FillBaseline]Zero" BarBaseline="[FillBaseline]Zero" Id="f4d4f415ab9641a892d848b3449e8eca" LineStroke="[SMSolidColorBrush]#ff962428" PointFill="[SMSolidColorBrush]#ff962428" PointShape="[PointShape]Ellipse" xmlns="http://www.ni.com/Controls.LabVIEW.Design" />
 							<PlotRenderer AreaBaseline="[FillBaseline]Zero" BarBaseline="[FillBaseline]Zero" Id="5253b8049f58479aa90ae5b8aa362615" LineStroke="[SMSolidColorBrush]#ff008ee4" PointFill="[SMSolidColorBrush]#ff008ee4" PointShape="[PointShape]Rectangle" xmlns="http://www.ni.com/Controls.LabVIEW.Design" />
@@ -111,9 +111,12 @@
 				<TabItem Header="[string]Line Regulation (%)" Id="74cb2bc3f0f24bc29e8003063eb47c8a" Left="[float]0" Top="[float]0">
 					<Canvas Height="[float]514" Id="d2a7a7202fc747b8b8b9ac1603115cc1" Left="[float]5" Top="[float]30" Width="[float]874" xmlns="http://www.ni.com/PlatformFramework">
 						<ArrayGraph Background="[SMSolidColorBrush]#00000000" BaseName="[string]Array Graph" Height="[float]511" Id="4423ff29adc643d38622a6d14ff2e5d7" Label="[UIModel]6bb127d0fe034748af4ee4f8ce069c3c" Left="[float]0" MinWidth="[float]230" PlotAreaMargin="[SMThickness]66,26,14,52" PreferIndexData="[bool]False" RenderMode="[RenderMode]Hardware" SuppressScaleLayout="[bool]False" Top="[float]0" Width="[float]874" xmlns="http://www.ni.com/ConfigurationBasedSoftware.Core">
-							<ArrayGraphAxis Adjuster="[RangeAdjuster]FitExactly" DisableMappingChanges="[bool]False" Id="87a152d74f9444d49265c8ed1b8593eb" Label="[string]Source Voltage (V)" LabelFont="13ca88615e8741939b71986985e92305" LabelVisibility="[SMVisibility]Visible" MajorDivisions="[UIModel]ef61c8a48a2242d88e5aa27f6ad11abc" MinorGridLinesColor="[SMColor]#00ffffff" MinorTickVisibility="[SMVisibility]Collapsed" Orientation="[SMOrientation]Horizontal" Range="[IRange]1, 100, System.Double" ScaleKind="[RangeScaleKind]LogarithmBase10" ValueType="[Type]Double">
-								<RangeLabeledDivisions Id="ef61c8a48a2242d88e5aa27f6ad11abc" LabelVisibility="[SMVisibility]Visible" Mode="[RangeDivisionsMode]Auto" TickVisibility="[SMVisibility]Visible" xmlns="http://www.ni.com/Controls.LabVIEW.Design" />
+							<ArrayGraphAxis Adjuster="[RangeAdjuster]FitExactly" ContentFont="6ce01f19ec7c47af803f9631436f404b" DisableMappingChanges="[bool]False" Id="87a152d74f9444d49265c8ed1b8593eb" IsInverted="[bool]False" Label="[string]Source Voltage (V)" LabelFont="13ca88615e8741939b71986985e92305" LabelVisibility="[SMVisibility]Visible" MajorDivisions="[UIModel]ef61c8a48a2242d88e5aa27f6ad11abc" MinorGridLinesColor="[SMColor]#00ffffff" MinorTickVisibility="[SMVisibility]Visible" Orientation="[SMOrientation]Horizontal" Range="[IRange]0.01, 100, System.Double" ScaleKind="[RangeScaleKind]LogarithmBase10" ValueType="[Type]Double">
+								<RangeLabeledDivisions Id="ef61c8a48a2242d88e5aa27f6ad11abc" LabelVisibility="[SMVisibility]Visible" Mode="[RangeDivisionsMode]Auto" TickVisibility="[SMVisibility]Visible" xmlns="http://www.ni.com/Controls.LabVIEW.Design">
+									<p.LabelPresenter Format="G6" />
+								</RangeLabeledDivisions>
 								<FontSetting FontFamily="Segoe UI" FontSize="12" Id="13ca88615e8741939b71986985e92305" xmlns="http://www.ni.com/PlatformFramework" />
+								<FontSetting FontFamily="Segoe UI" FontSize="9" Id="6ce01f19ec7c47af803f9631436f404b" xmlns="http://www.ni.com/PlatformFramework" />
 							</ArrayGraphAxis>
 							<ArrayGraphAxis Adjuster="[RangeAdjuster]FitVisibleLoosely" DisableMappingChanges="[bool]False" Id="44834fee56404cbd83c606d090de167f" Label="[string]Load Voltage Deviation (%)" LabelFont="1916a4538898435abcb043a376a21d3e" LabelVisibility="[SMVisibility]Visible" MajorDivisions="[UIModel]e570ac76d37c4f7e9bbd951c66e6eb2d" Orientation="[SMOrientation]Vertical" Range="[IRange]0.12, 0.17, System.Double" ValueType="[Type]Double">
 								<RangeLabeledDivisions Id="e570ac76d37c4f7e9bbd951c66e6eb2d" xmlns="http://www.ni.com/Controls.LabVIEW.Design" />
