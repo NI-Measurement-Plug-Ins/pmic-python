@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SourceFile Checksum="FBC57B97A6F50C0FC95059C1521F5F96F44E64DDB5F580F2636AF2DE5EB3924C2CBC2210F2F83D3D70782F47E9CDE8D8A4FF6AB61C6C36820A1F7BC8D2A25ABB" xmlns="http://www.ni.com/PlatformFramework">
+	<SourceModelFeatureSet>
+		<ParsableNamespace AssemblyFileVersion="9.17.0.49698" FeatureSetName="Editor" Name="http://www.ni.com/PlatformFramework" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
+		<ApplicationVersionInfo Build="25.5.0.49698" Name="InstrumentStudio" PersistenceVersion="22.1.0.0" Version="25.5.0.49698" />
+	</SourceModelFeatureSet>
+	<Project xmlns="http://www.ni.com/PlatformFramework">
+		<EnvoyManagerRootEnvoy Id="b8efb27f93ae4edb9d61d8cc1095810d" ModelDefinitionType="EnvoyManagerRootEnvoy" Name="RootEnvoy" />
+		<EmbeddedDefinitionReference Id="664505d7bb30406e8bc3308ef3ac63dd" ModelDefinitionType="NationalInstruments.ProjectExplorer.Modeling.ProjectDataManager" Name="ProjectExplorer">
+			<ProjectExplorer />
+		</EmbeddedDefinitionReference>
+		<NameScopingEnvoy Id="3ffa34f1097445f59b00bfa981472b73" ModelDefinitionType="DefaultTarget" Name="DefaultTarget">
+			<DefaultTarget />
+			<FileReference Bindings=".seq" Id="e3314d56b824f8da4eb38ea5d0dded5" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC.seq" StoragePath="PMIC.seq" />
+			<FileReference Bindings=".pdf" Id="765b8995468e4e2b93e83bb0a6f31cf3" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name=" Report 2025-06-29 17-59-51.pdf" StoragePath="Sequence Results\ Report 2025-06-29 17-59-51.pdf" />
+			<FileReference Bindings=".pdf" Id="d309c06d0f21460c9de4c07da7420f66" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name=" Report 2025-06-29 18-00-22.pdf" StoragePath="Sequence Results\ Report 2025-06-29 18-00-22.pdf" />
+			<FileReference Bindings=".pdf" Id="bc09d668452140dda42772a00daf7143" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-29 23-32-45.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-29 23-32-45.pdf" />
+			<FileReference Bindings=".pdf" Id="ea52a9acb8b74d5588581695bfd63de8" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-29 23-33-02.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-29 23-33-02.pdf" />
+			<FileReference Bindings=".pdf" Id="16d67d8eefd1414cb3eccd0df2033b40" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-29 23-39-26.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-29 23-39-26.pdf" />
+			<FileReference Bindings=".pdf" Id="937561b800384049918664311e7e094d" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-29 23-39-57.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-29 23-39-57.pdf" />
+			<FileReference Bindings=".pdf" Id="e750ac42fa364d93b6c12ad430f6ce1e" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-29 23-40-16.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-29 23-40-16.pdf" />
+			<FileReference Bindings=".pdf" Id="1d7ed85b54e448bcafa8f149dd5c183b" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 11-15-31.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 11-15-31.pdf" />
+			<FileReference Bindings=".pdf" Id="c95788416064904bc4985c907634a22" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 11-16-08.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 11-16-08.pdf" />
+			<FileReference Bindings=".pdf" Id="f2db9bb35158448caefa2f9cf46d781a" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 11-29-17.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 11-29-17.pdf" />
+			<FileReference Bindings=".pdf" Id="55a97a19825f4af190322e6675d93a1e" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 11-41-45.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 11-41-45.pdf" />
+			<FileReference Bindings=".pdf" Id="fdd4ab01b36044ddb9fd32ae1e0ef3c2" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 11-57-43.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 11-57-43.pdf" />
+			<FileReference Bindings=".pdf" Id="dd09c22cdeb24b439f2dc1a58c5e9b7e" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 12-10-40.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 12-10-40.pdf" />
+			<FileReference Bindings=".pdf" Id="4984a042a30449e78e7851e219531ae5" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 12-11-36.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 12-11-36.pdf" />
+			<FileReference Bindings=".pdf" Id="6e18f2592a544398955015320571e0d7" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 12-43-59.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 12-43-59.pdf" />
+			<FileReference Bindings=".pdf" Id="96516d6dec084ab5985b7d853b34c068" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 12-44-41.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 12-44-41.pdf" />
+			<SourceFileReference Bindings="EnvoyManager" Id="554370943fb4421fba1012fe39cae615" ModelDefinitionType="NationalInstruments.InstrumentFramework.Document.SourceModel.UnifiedTask" Name="Instrument.sfp" StoragePath="Instrument.sfp" />
+			<FileReference Bindings=".pdf" Id="edace214b68148de98303d370cb3e0c3" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 03-22-19.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 03-22-19.pdf" />
+			<FileReference Bindings=".pdf" Id="431172027db54badab18bfe3380647de" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 03-26-34.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 03-26-34.pdf" />
+			<FileReference Bindings=".pdf" Id="fced2028dad94024b3e20b4031a643bf" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 03-41-50.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 03-41-50.pdf" />
+			<FileReference Bindings=".pdf" Id="9f5674d8f1eb4abe97861fc69de75b32" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 03-44-48.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 03-44-48.pdf" />
+			<FileReference Bindings=".pdf" Id="7145ea4472864b4190d240ef69b1717e" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 08-36-30.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 08-36-30.pdf" />
+			<FileReference Bindings=".pdf" Id="9f06bb6564f84e8e93a37ed2fe0ea3db" ModelDefinitionType="{http://www.ni.com/PlatformFramework}ExternalFile" Name="PMIC Report 2025-06-30 08-48-40.pdf" StoragePath="Sequence Results\PMIC Report 2025-06-30 08-48-40.pdf" />
+			<SourceFileReference Bindings="EnvoyManager" Id="985c1ff04fc74050a1bb0f5402178423" ModelDefinitionType="NationalInstruments.InstrumentFramework.Document.SourceModel.UnifiedTask" Name="Instrument_6.sfp" StoragePath="Instrument_6.sfp" />
+		</NameScopingEnvoy>
+	</Project>
+	<ProjectInformation xmlns="http://www.ni.com/PlatformFramework">
+		<p.ProjectProperties>
+			<Kind Name="plugin.reference">
+				<Item Name="Efficiency And Load Regulation_PMIC_LabVIEW" Value="2.0.0" />
+				<Item Name="EfficiencyAndLoadRegulation_PMIC_Python" Value="0.0.1" />
+				<Item Name="Single Point Efficiency And Load Regulation_PMIC_LabVIEW" Value="2.0.0" />
+			</Kind>
+		</p.ProjectProperties>
+	</ProjectInformation>
+</SourceFile>
