@@ -1,7 +1,7 @@
 {
   "services": [
     {
-      "displayName": "Efficiency And Load Regulation (Py)",
+      "displayName": "Single Efficiency And Load Regulation (Py)",
       "serviceClass": "EfficiencyAndLoadRegulation_PMIC_Python",
       "descriptionUrl": "",
       "providedInterfaces": [

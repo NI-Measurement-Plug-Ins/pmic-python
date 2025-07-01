@@ -239,7 +239,7 @@ def configure_source(
 ) -> None:
     # configure the source session
     session.channels[channel_name].sense = Sense.REMOTE
-    session.channels[channel_name].source_mode = SourceMode.SEQUENCE
+    session.channels[channel_name].source_mode = SourceMode.SINGLE_POINT
     session.channels[channel_name].output_function = OutputFunction.DC_VOLTAGE
 
     session.channels[channel_name].voltage_level_autorange = True
@@ -247,13 +247,13 @@ def configure_source(
     session.channels[channel_name].source_delay = source_delay
 
     #To-do
-    session.channels[channel_name].create_advanced_sequence('SourceVoltages', ['voltage_level', 'current_limit'])
-    session.channels[channel_name].create_advanced_sequence_step()
+    # session.channels[channel_name].create_advanced_sequence('SourceVoltages', ['voltage_level', 'current_limit'])
+    # session.channels[channel_name].create_advanced_sequence_step()
     session.channels[channel_name].voltage_level = voltage_level
     session.channels[channel_name].current_limit = get_current_limit(voltage_level, current_limit, power_limit)
 
     session.channels[channel_name].measure_when = MeasureWhen.AUTOMATICALLY_AFTER_SOURCE_COMPLETE
-    # session.channels[channel_name].aperture_time = aperture_time
+    session.channels[channel_name].aperture_time = aperture_time
 
     session.channels[channel_name].commit()
     return
@@ -271,12 +271,12 @@ def configure_load(
 ) -> None:
     # configure the load session
     session.channels[channel_name].sense = Sense.REMOTE
-    session.channels[channel_name].source_mode = SourceMode.SEQUENCE
+    session.channels[channel_name].source_mode = SourceMode.SINGLE_POINT
     session.channels[channel_name].output_function = OutputFunction.DC_CURRENT
 
     session.channels[channel_name].current_level_autorange = True
     session.channels[channel_name].voltage_limit_range = voltage_limit_range
-    session.channels[channel_name].set_sequence(current_levels, [0 for _ in range(len(current_levels))])
+    # session.channels[channel_name].set_sequence(current_levels, [0 for _ in range(len(current_levels))])
 
     session.channels[channel_name].source_trigger_type = TriggerType.DIGITAL_EDGE
     session.channels[channel_name].measure_trigger_type = TriggerType.DIGITAL_EDGE

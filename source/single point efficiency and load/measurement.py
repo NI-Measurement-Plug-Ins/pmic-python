@@ -12,7 +12,7 @@ service_directory = pathlib.Path(script_or_exe).resolve().parent
 measurement_service = nims.MeasurementService(  # Check if class name is still MeasurementService
     service_config_path=service_directory / "EfficiencyAndLoadRegulation_PMIC.serviceconfig",
     version="1.0.0.0",
-    ui_file_paths=[service_directory / "Measurement UI.vi"], # Add UI file paths if any
+    ui_file_paths=[service_directory / "BuiltUI/PMIC UI.lvlibp/Measurement UI.vi"], # Add UI file paths if any
 )
 
 
@@ -32,12 +32,12 @@ measurement_service = nims.MeasurementService(  # Check if class name is still M
 # Load Settings
 @measurement_service.configuration('Load resource name', nims.DataType.String, 'E-load')
 @measurement_service.configuration('Load voltage limit range', nims.DataType.Double, 5.0)
-@measurement_service.configuration('Load sweep type', nims.DataType.String, 'Logarithmic')
+# @measurement_service.configuration('Load sweep type', nims.DataType.String, 'Logarithmic')
 @measurement_service.configuration('Source Voltage', nims.DataType.Double, 0)
-@measurement_service.configuration('Load current', nims.DataType.Double, 0)
+@measurement_service.configuration('Load Current', nims.DataType.Double, 0)
 # configure outputs
 @measurement_service.output('Status', nims.DataType.String)
-@measurement_service.output('Voltage value', nims.DataType.Double)
+# @measurement_service.output('Voltage value', nims.DataType.Double)
 @measurement_service.output('Load currents', nims.DataType.Double)
 @measurement_service.output('Efficiency', nims.DataType.Double)
 @measurement_service.output('Load voltages', nims.DataType.Double)
@@ -53,9 +53,9 @@ def measure(
         source_maximum_power: float,
         load_resource_name: str,
         load_voltage_limit_range: float,
-        # load_sweep_type: str,
-        load_current: float,
         source_voltage: float,
+        load_current: float,
+        
 ):
     
     # Constants
@@ -139,7 +139,7 @@ def measure(
             load_session.channels[load_device_channel].initiate()
             source_session.channels[source_device_channel].initiate()
 
-            load_session.channels[load_device_channel].wait_for_event(event_id=Event.SEQUENCE_ENGINE_DONE)
+            load_session.channels[load_device_channel].wait_for_event(event_id=Event.MEASURE_COMPLETE)
             # source_sweep_points = len(voltage_values)
 
             load_currents, load_voltages, efficiency, load_voltage_deviation = perform_measurements(
@@ -181,7 +181,7 @@ def measure(
     # Measure logic end
     return (
         status,
-        source_voltage,
+        # source_voltage,
         load_currents,
         efficiency,
         load_voltages,
