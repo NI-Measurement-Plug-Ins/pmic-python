@@ -63,7 +63,7 @@ def measure(
     load_device_channel: str = '0'
     # Outputs
     status: str = str()
-    voltage_value: float = float()
+    # voltage_value: float = float()
     # source_sweep_points: int = int()
     # load_sweep_points: int = int()
     load_currents: float = float()
