@@ -276,7 +276,7 @@ def configure_load(
 
     session.channels[channel_name].current_level_autorange = True
     session.channels[channel_name].voltage_limit_range = voltage_limit_range
-    session.channels[channel_name].set_sequence(current_levels, [0 for _ in range(len(current_levels))])
+    # session.channels[channel_name].set_sequence(current_levels, [0 for _ in range(len(current_levels))])
 
     session.channels[channel_name].source_trigger_type = TriggerType.DIGITAL_EDGE
     session.channels[channel_name].measure_trigger_type = TriggerType.DIGITAL_EDGE

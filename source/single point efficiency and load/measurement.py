@@ -32,12 +32,10 @@ measurement_service = nims.MeasurementService(  # Check if class name is still M
 # Load Settings
 @measurement_service.configuration('Load resource name', nims.DataType.String, 'E-load')
 @measurement_service.configuration('Load voltage limit range', nims.DataType.Double, 5.0)
-# @measurement_service.configuration('Load sweep type', nims.DataType.String, 'Logarithmic')
 @measurement_service.configuration('Source Voltage', nims.DataType.Double, 0)
 @measurement_service.configuration('Load Current', nims.DataType.Double, 0)
 # configure outputs
 @measurement_service.output('Status', nims.DataType.String)
-# @measurement_service.output('Voltage value', nims.DataType.Double)
 @measurement_service.output('Load currents', nims.DataType.Double)
 @measurement_service.output('Efficiency', nims.DataType.Double)
 @measurement_service.output('Load voltages', nims.DataType.Double)
@@ -63,9 +61,6 @@ def measure(
     load_device_channel: str = '0'
     # Outputs
     status: str = str()
-    # voltage_value: float = float()
-    # source_sweep_points: int = int()
-    # load_sweep_points: int = int()
     load_currents: float = float()
     efficiency: float = float()
     load_voltages: float = float()
@@ -77,21 +72,9 @@ def measure(
         pass
 
     elif mode_of_operation == ModeOfOperation.PerformMeasurement:
-
-        # if load_sweep_type.lower() == 'logarithmic':
-            # load_sweep_type_enum = SweepType.Logarithmic
-        # elif load_sweep_type.lower() != 'linear':
-        #     raise ValueError(f'{load_sweep_type} Sweep Type is not supported ')
-
         source_session = Session(source_resource_name, source_device_channel)
         load_session = Session(load_resource_name, load_device_channel)
         try:
-            # voltage_values = generate_sequence(
-            #     SweepType.Linear,
-            #     source_start_voltage,
-            #     source_stop_voltage,
-            #     source_voltage_sweep_points
-            # )
             initiate_source(
                 session=source_session,
                 channel_name=source_device_channel,
@@ -107,15 +90,6 @@ def measure(
                 voltage_limit_range=load_voltage_limit_range,
                 source_delay=dut_setup_time
             )
-            # current_results = generate_sequence(
-            #     load_sweep_type_enum,
-            #     load_start_current,
-            #     load_stop_current,
-            #     load_current_sweep_points_points_per_decade
-            # )
-
-            # load_sweep_points = len(current_results)
-            # current_values = len(voltage_values) * current_results
 
             configure_source(
                 session=source_session,
@@ -140,31 +114,18 @@ def measure(
             source_session.channels[source_device_channel].initiate()
 
             load_session.channels[load_device_channel].wait_for_event(event_id=Event.MEASURE_COMPLETE)
-            # source_sweep_points = len(voltage_values)
 
             load_currents, load_voltages, efficiency, load_voltage_deviation = perform_measurements(
                 source_session=source_session,
                 source_device_channel=source_device_channel,
                 load_session=load_session,
                 load_device_channel=load_device_channel,
-                # voltage_values=voltage_values,
-                # load_sweep_points=load_sweep_points,
                 nominal_output_voltage=nominal_output_voltage,
                 load_current=load_current,
                 load_voltage=source_voltage,
                 efficiency=efficiency,
                 load_voltage_deviation=load_voltage_deviation
             )
-            # for _ in gen:
-            #     yield (
-            #         status,
-            #         voltage_value,
-            #         load_current,
-            #         efficiency,
-            #         load_voltage,
-            #         load_voltage_deviation,
-            #     )
-            #     pass
 
             reset_sessions(source_session, source_device_channel, load_session, load_device_channel)
             status = 'The measurement is performed successfully'
@@ -181,7 +142,6 @@ def measure(
     # Measure logic end
     return (
         status,
-        # source_voltage,
         load_currents,
         efficiency,
         load_voltages,
