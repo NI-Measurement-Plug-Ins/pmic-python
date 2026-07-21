@@ -1,0 +1,19 @@
+{
+  "services": [
+    {
+      "displayName": "Ganged Efficiency And Load Regulation (Py)",
+      "serviceClass": "Ganged_EfficiencyAndLoadRegulation_PMIC_Python",
+      "descriptionUrl": "",
+      "providedInterfaces": [
+        "ni.measurementlink.measurement.v1.MeasurementService",
+        "ni.measurementlink.measurement.v2.MeasurementService"
+      ],
+      "path": "start.bat",
+      "annotations": {
+        "ni/service.description": "Efficiency and Load Regulation ganged measurement for PMIC",
+        "ni/service.collection": "Ganged_PMIC",
+        "ni/service.tags": ["efficiency and load regulation","pmic", "ganged"]
+      }
+    }
+  ]
+}
