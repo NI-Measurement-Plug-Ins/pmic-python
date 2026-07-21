@@ -10,6 +10,7 @@
 # - Check complete Channel Ganging library and ensure all functions are translated here
 # - Comment stuff. Linting?
 
+from concurrent.futures import ThreadPoolExecutor
 from statistics import mean
 
 from dataclasses import dataclass
@@ -264,8 +265,14 @@ def initiate(ganged_session: GangedSession):
 
 
 def wait_for_event(ganged_session: GangedSession, event: Event=Event.SOURCE_COMPLETE, timeout: float=10.0):
-    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
-        session.channels[channel].wait_for_event(event_id=event, timeout=timeout)
+    with ThreadPoolExecutor(max_workers=len(ganged_session.session_list)) as executor:
+        futures = [
+            executor.submit(session.channels[channel].wait_for_event, event_id=event, timeout=timeout)
+            for session, channel in zip(ganged_session.session_list, ganged_session.channel)
+        ]
+
+        for future in futures:
+            future.result()
     
     return
     
@@ -358,8 +365,8 @@ def reset(ganged_session: GangedSession):
 
 
 def close(ganged_session: GangedSession):
-    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
-        session.channels[channel].close()
+    for session in ganged_session.session_list:
+        session.close()
     
     return
 

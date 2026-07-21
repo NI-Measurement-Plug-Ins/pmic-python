@@ -180,12 +180,12 @@ def measure(
     configure_transient_response(source_ganged_session, TransientResponse(source_transient_response), OutputFunction.DC_VOLTAGE, source_voltage_gain_bandwidth, source_voltage_compensation_frequency, source_voltage_pole_zero_ratio)
     configure_source_delay(source_ganged_session, source_delay=source_delay)
     configure_aperture_time(source_ganged_session, aperture_time=aperture_time)
-    source_sequence = []
-    for voltage in source_sweep_values:
-        for i in range(load_current_sweep_points_points_per_decade):
-            source_sequence.append(voltage)
+    # source_sequence = []
+    # for voltage in source_sweep_values:
+    #     for i in range(load_current_sweep_points_points_per_decade):
+    #         source_sequence.append(voltage)
 
-    set_sequence(source_ganged_session, values=source_sequence, source_delays=source_delay, output_function=OutputFunction.DC_VOLTAGE)
+    # set_sequence(source_ganged_session, values=source_sequence, source_delays=source_delay, output_function=OutputFunction.DC_VOLTAGE)
 
     ## Configure load to sequence
     configure_source_mode(load_ganged_session, source_mode=SourceMode.SEQUENCE)
@@ -195,18 +195,26 @@ def measure(
     configure_aperture_time(load_ganged_session, aperture_time=aperture_time)
     # TODO - double check sweep functionality if initial tests do not work
     load_sweep_values = generate_sequence(SweepType.Logarithmic, load_start_current, load_stop_current, load_current_sweep_points_points_per_decade)
+
+    source_sweep_points = len(source_sweep_values)
     load_sequence = []
-    for current in load_sweep_values:
-        for i in range(source_voltage_sweep_points):
+    for i in range(source_sweep_points):
+        for current in load_sweep_values:
             load_sequence.append(current)
         
     set_sequence(load_ganged_session, values=load_sequence, source_delays=source_delay, output_function=OutputFunction.DC_CURRENT)
 
+    load_sweep_points = len(load_sweep_values)
+    source_sequence = []
+    for voltage in source_sweep_values:
+        for i in range(load_sweep_points):
+            source_sequence.append(voltage)
+
+    set_sequence(source_ganged_session, values=source_sequence, source_delays=source_delay, output_function=OutputFunction.DC_VOLTAGE)
+
     ## Configure triggers
     source_trigger_terminal = build_trigger_terminal(source_ganged_session.session_list[0], "0", "SourceTrigger")
     source_complete_terminal = build_trigger_terminal(source_ganged_session.session_list[0], "0", "SourceCompleteEvent")
-    print(source_trigger_terminal)
-    print(source_complete_terminal)
     configure_digital_edge_source_trigger(load_ganged_session, source_trigger_terminal)
     configure_digital_edge_measure_trigger(load_ganged_session, source_complete_terminal)
     configure_triggers(load_ganged_session, measure_when=MeasureWhen.ON_MEASURE_TRIGGER)
@@ -243,12 +251,12 @@ def measure(
     abort(source_ganged_session)
 
     output_enabled(load_ganged_session, output_enabled=False)
-    output_connected(load_ganged_session, output_enabled=False)
+    output_connected(load_ganged_session, output_connected=False)
     reset(load_ganged_session)
     close(load_ganged_session)
 
     output_enabled(source_ganged_session, output_enabled=False)
-    output_connected(source_ganged_session, output_enabled=False)
+    output_connected(source_ganged_session, output_connected=False)
     reset(source_ganged_session)
     close(source_ganged_session)
 
@@ -369,8 +377,8 @@ def measure(
         voltage_values,
         source_sweep_points,
         load_sweep_points,
-        load_currents,
         efficiency,
+        load_currents,
         load_voltages,
         load_voltage_deviation,
     )
