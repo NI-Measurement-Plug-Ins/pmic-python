@@ -17,6 +17,26 @@ measurement_service = nims.MeasurementService(
 )
 
 
+def _safe_cleanup_action(action_name: str, action, session_label: str) -> None:
+    """Run one cleanup action and keep going if it fails."""
+    try:
+        action()
+    except Exception as exc:
+        logging.warning("Cleanup step '%s' failed for %s session: %s", action_name, session_label, exc)
+
+
+def _cleanup_ganged_session(ganged_session, session_label: str) -> None:
+    """Best-effort shutdown for a ganged session."""
+    if ganged_session is None:
+        return
+
+    _safe_cleanup_action("abort", lambda: abort(ganged_session), session_label)
+    _safe_cleanup_action("output_enabled(False)", lambda: output_enabled(ganged_session, output_enabled=False), session_label)
+    _safe_cleanup_action("output_connected(False)", lambda: output_connected(ganged_session, output_connected=False), session_label)
+    _safe_cleanup_action("reset", lambda: reset(ganged_session), session_label)
+    _safe_cleanup_action("close", lambda: close(ganged_session), session_label)
+
+
 @measurement_service.register_measurement
 # On-Off feature
 #TODO Remove mode of operation as it will not be needed
@@ -115,262 +135,136 @@ def measure(
         load_current_pole_zero_ratio: float,
 ):
     # Constants
-    source_device_channel: str = '0'
-    load_device_channel: str = '0'
     load_sweep_type_enum = SweepType.Linear
+    source_ganged_session = None
+    load_ganged_session = None
     # Outputs
-    status: str = str()
-    voltage_values: list[float] = list()
-    source_sweep_points: int = int()
-    load_sweep_points: int = int()
-    load_currents: list[float] = list()
-    efficiency: list[float] = list()
-    load_voltages: list[float] = list()
-    load_voltage_deviation: list[float] = list()
+    voltage_values: list[float] = []
+    source_sweep_points = 0
+    load_sweep_points = 0
+    load_currents: list[float] = []
+    efficiency: list[float] = []
+    load_voltages: list[float] = []
+    load_voltage_deviation: list[float] = []
     # Measure logic start
 
-    if load_sweep_type.lower() == 'logarithmic':
-        load_sweep_type_enum = SweepType.Logarithmic
-    elif load_sweep_type.lower() != 'linear':
-        raise ValueError(f'{load_sweep_type} Sweep Type is not supported ')
+    try:
+        if load_sweep_type.lower() == 'logarithmic':
+            load_sweep_type_enum = SweepType.Logarithmic
+        elif load_sweep_type.lower() != 'linear':
+            raise ValueError(f'{load_sweep_type} Sweep Type is not supported ')
 
-    ## Initialize source configuration
-    source_channel_list = channel_list(master_source_resource_name, slave_source_resource_names)
-    source_ganged_session = initialize(source_channel_list, ganged_config=source_system_config)
-    configure_source_mode(source_ganged_session, source_mode=SourceMode.SINGLE_POINT)
-    configure_sense(source_ganged_session, sense=Sense(source_sense))
-    configure_output_function(source_ganged_session, output_function=OutputFunction.DC_VOLTAGE)
-    configure_voltage_level_range(source_ganged_session, source_voltage_level_range)
-    configure_current_limit_range(source_ganged_session, source_current_limit_range)
-    configure_current_limit(source_ganged_session, source_current_limit_high, source_current_limit_low, source_limit_symmetry)
-    # TODO - double check sweep functionality if initial tests do not work
-    source_sweep_values = generate_sequence(SweepType.Linear, source_start_voltage, source_stop_voltage, source_voltage_sweep_points)
-    configure_voltage_level(source_ganged_session, source_sweep_values[0])
-    configure_transient_response(source_ganged_session, TransientResponse(source_transient_response), OutputFunction.DC_VOLTAGE, source_voltage_gain_bandwidth, source_voltage_compensation_frequency, source_voltage_pole_zero_ratio)
-    configure_source_delay(source_ganged_session, source_delay=dut_setup_time)
-    output_enabled(source_ganged_session, output_enabled=True)
-    configure_triggers(source_ganged_session)
-    commit(source_ganged_session)
-    initiate(source_ganged_session)
-    wait_for_event(source_ganged_session, timeout=timeout)
-    abort(source_ganged_session)
+        ## Initialize source configuration
+        source_channel_list = channel_list(master_source_resource_name, slave_source_resource_names)
+        source_ganged_session = initialize(source_channel_list, ganged_config=source_system_config)
+        configure_source_mode(source_ganged_session, source_mode=SourceMode.SINGLE_POINT)
+        configure_sense(source_ganged_session, sense=Sense(source_sense))
+        configure_output_function(source_ganged_session, output_function=OutputFunction.DC_VOLTAGE)
+        configure_voltage_level_range(source_ganged_session, source_voltage_level_range)
+        configure_current_limit_range(source_ganged_session, source_current_limit_range)
+        configure_current_limit(source_ganged_session, source_current_limit_high, source_current_limit_low, source_limit_symmetry)
+        source_sweep_values = generate_sequence(SweepType.Linear, source_start_voltage, source_stop_voltage, source_voltage_sweep_points)
+        configure_voltage_level(source_ganged_session, source_sweep_values[0])
+        configure_transient_response(source_ganged_session, TransientResponse(source_transient_response), OutputFunction.DC_VOLTAGE, source_voltage_gain_bandwidth, source_voltage_compensation_frequency, source_voltage_pole_zero_ratio)
+        configure_source_delay(source_ganged_session, source_delay=dut_setup_time)
+        output_enabled(source_ganged_session, output_enabled=True)
+        configure_triggers(source_ganged_session)
+        commit(source_ganged_session)
+        initiate(source_ganged_session)
+        wait_for_event(source_ganged_session, timeout=timeout)
+        abort(source_ganged_session)
 
-    ## Initialize load configuration
-    load_channel_list = channel_list(master_load_resource_name, slave_load_resource_names)
-    load_ganged_session = initialize(load_channel_list, ganged_config=load_system_config)
-    configure_source_mode(load_ganged_session, source_mode=SourceMode.SINGLE_POINT)
-    configure_sense(load_ganged_session, sense=Sense(load_sense))
-    configure_output_function(load_ganged_session, output_function=OutputFunction.DC_CURRENT)
-    configure_voltage_limit(load_ganged_session, load_voltage_limit_high, load_voltage_limit_low, load_limit_symmetry)
-    configure_voltage_limit_range(load_ganged_session, load_voltage_limit_range)
-    configure_current_level_range(load_ganged_session, load_current_level_range)
-    configure_current_level(load_ganged_session, load_stop_current)
-    configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
-    configure_source_delay(load_ganged_session, source_delay=dut_setup_time)
-    output_enabled(load_ganged_session, output_enabled=True)
-    configure_triggers(load_ganged_session)
-    commit(load_ganged_session)
-    initiate(load_ganged_session)
-    wait_for_event(load_ganged_session, timeout=timeout)
-    abort(load_ganged_session)
+        ## Initialize load configuration
+        load_channel_list = channel_list(master_load_resource_name, slave_load_resource_names)
+        load_ganged_session = initialize(load_channel_list, ganged_config=load_system_config)
+        configure_source_mode(load_ganged_session, source_mode=SourceMode.SINGLE_POINT)
+        configure_sense(load_ganged_session, sense=Sense(load_sense))
+        configure_output_function(load_ganged_session, output_function=OutputFunction.DC_CURRENT)
+        configure_voltage_limit(load_ganged_session, load_voltage_limit_high, load_voltage_limit_low, load_limit_symmetry)
+        configure_voltage_limit_range(load_ganged_session, load_voltage_limit_range)
+        configure_current_level_range(load_ganged_session, load_current_level_range)
+        configure_current_level(load_ganged_session, load_stop_current)
+        configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
+        configure_source_delay(load_ganged_session, source_delay=dut_setup_time)
+        output_enabled(load_ganged_session, output_enabled=True)
+        configure_triggers(load_ganged_session)
+        commit(load_ganged_session)
+        initiate(load_ganged_session)
+        wait_for_event(load_ganged_session, timeout=timeout)
+        abort(load_ganged_session)
 
-    ## Configure source to sequence
-    configure_source_mode(source_ganged_session, source_mode=SourceMode.SEQUENCE)
-    configure_output_function(source_ganged_session, output_function=OutputFunction.DC_VOLTAGE)
-    configure_transient_response(source_ganged_session, TransientResponse(source_transient_response), OutputFunction.DC_VOLTAGE, source_voltage_gain_bandwidth, source_voltage_compensation_frequency, source_voltage_pole_zero_ratio)
-    configure_source_delay(source_ganged_session, source_delay=source_delay)
-    configure_aperture_time(source_ganged_session, aperture_time=aperture_time)
-    # source_sequence = []
-    # for voltage in source_sweep_values:
-    #     for i in range(load_current_sweep_points_points_per_decade):
-    #         source_sequence.append(voltage)
+        ## Configure source to sequence
+        configure_source_mode(source_ganged_session, source_mode=SourceMode.SEQUENCE)
+        configure_output_function(source_ganged_session, output_function=OutputFunction.DC_VOLTAGE)
+        configure_transient_response(source_ganged_session, TransientResponse(source_transient_response), OutputFunction.DC_VOLTAGE, source_voltage_gain_bandwidth, source_voltage_compensation_frequency, source_voltage_pole_zero_ratio)
+        configure_source_delay(source_ganged_session, source_delay=source_delay)
+        configure_aperture_time(source_ganged_session, aperture_time=aperture_time)
 
-    # set_sequence(source_ganged_session, values=source_sequence, source_delays=source_delay, output_function=OutputFunction.DC_VOLTAGE)
+        ## Configure load to sequence
+        configure_source_mode(load_ganged_session, source_mode=SourceMode.SEQUENCE)
+        configure_output_function(load_ganged_session, output_function=OutputFunction.DC_CURRENT)
+        configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
+        configure_source_delay(load_ganged_session, source_delay=source_delay)
+        configure_aperture_time(load_ganged_session, aperture_time=aperture_time)
+        load_sweep_values = generate_sequence(load_sweep_type_enum, load_start_current, load_stop_current, load_current_sweep_points_points_per_decade)
 
-    ## Configure load to sequence
-    configure_source_mode(load_ganged_session, source_mode=SourceMode.SEQUENCE)
-    configure_output_function(load_ganged_session, output_function=OutputFunction.DC_CURRENT)
-    configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
-    configure_source_delay(load_ganged_session, source_delay=source_delay)
-    configure_aperture_time(load_ganged_session, aperture_time=aperture_time)
-    # TODO - double check sweep functionality if initial tests do not work
-    load_sweep_values = generate_sequence(SweepType.Logarithmic, load_start_current, load_stop_current, load_current_sweep_points_points_per_decade)
+        source_sweep_points = len(source_sweep_values)
+        load_sequence = []
+        for _ in range(source_sweep_points):
+            for current in load_sweep_values:
+                load_sequence.append(current)
 
-    source_sweep_points = len(source_sweep_values)
-    load_sequence = []
-    for i in range(source_sweep_points):
-        for current in load_sweep_values:
-            load_sequence.append(current)
-        
-    set_sequence(load_ganged_session, values=load_sequence, source_delays=source_delay, output_function=OutputFunction.DC_CURRENT)
+        set_sequence(load_ganged_session, values=load_sequence, source_delays=source_delay, output_function=OutputFunction.DC_CURRENT)
 
-    load_sweep_points = len(load_sweep_values)
-    source_sequence = []
-    for voltage in source_sweep_values:
-        for i in range(load_sweep_points):
-            source_sequence.append(voltage)
+        load_sweep_points = len(load_sweep_values)
+        source_sequence = []
+        for voltage in source_sweep_values:
+            for _ in range(load_sweep_points):
+                source_sequence.append(voltage)
 
-    set_sequence(source_ganged_session, values=source_sequence, source_delays=source_delay, output_function=OutputFunction.DC_VOLTAGE)
+        set_sequence(source_ganged_session, values=source_sequence, source_delays=source_delay, output_function=OutputFunction.DC_VOLTAGE)
 
-    ## Configure triggers
-    source_trigger_terminal = build_trigger_terminal(source_ganged_session.session_list[0], "0", "SourceTrigger")
-    source_complete_terminal = build_trigger_terminal(source_ganged_session.session_list[0], "0", "SourceCompleteEvent")
-    configure_digital_edge_source_trigger(load_ganged_session, source_trigger_terminal)
-    configure_digital_edge_measure_trigger(load_ganged_session, source_complete_terminal)
-    configure_triggers(load_ganged_session, measure_when=MeasureWhen.ON_MEASURE_TRIGGER)
+        ## Configure triggers
+        source_trigger_terminal = build_trigger_terminal(source_ganged_session.session_list[0], "0", "SourceTrigger")
+        source_complete_terminal = build_trigger_terminal(source_ganged_session.session_list[0], "0", "SourceCompleteEvent")
+        configure_digital_edge_source_trigger(load_ganged_session, source_trigger_terminal)
+        configure_digital_edge_measure_trigger(load_ganged_session, source_complete_terminal)
+        configure_triggers(load_ganged_session, measure_when=MeasureWhen.ON_MEASURE_TRIGGER)
 
-    ## Initiate devices
-    initiate(load_ganged_session)
-    initiate(source_ganged_session)
+        ## Initiate devices
+        initiate(load_ganged_session)
+        initiate(source_ganged_session)
 
-    wait_for_event(load_ganged_session, event=Event.SEQUENCE_ENGINE_DONE, timeout=timeout)
-    
-    ## Perform measurement
-    load_sweep_points = len(load_sweep_values)
-    source_sweep_points = len(source_sweep_values)
-    for voltage in source_sweep_values:
-        voltage_values.append(voltage)
-        for i in range(load_sweep_points):
-            # Efficiency calculation
-            ganged_source_v, ganged_source_i = measure_multiple(source_ganged_session)[:2]
-            ganged_load_v, ganged_load_i = measure_multiple(load_ganged_session)[:2]
-            ganged_source_p = abs(ganged_source_v * ganged_source_i)
-            ganged_load_p = abs(ganged_load_v * ganged_load_i)
-            eff =  (ganged_load_p / ganged_source_p) * 100
-            efficiency.append(eff)
-            
-            # Load measurements
-            load_currents.append(abs(ganged_load_i))
-            load_voltages.append(ganged_load_v)
+        wait_for_event(load_ganged_session, event=Event.SEQUENCE_ENGINE_DONE, timeout=timeout)
 
-            # Load voltage deviation
-            load_voltage_deviation.append(((load_voltages[-1] - nominal_output_voltage) / nominal_output_voltage) * 100)
+        ## Perform measurement
+        load_sweep_points = len(load_sweep_values)
+        source_sweep_points = len(source_sweep_values)
+        for voltage in source_sweep_values:
+            voltage_values.append(voltage)
+            for _ in range(load_sweep_points):
+                # Efficiency calculation
+                ganged_source_v, ganged_source_i = measure_multiple(source_ganged_session)[:2]
+                ganged_load_v, ganged_load_i = measure_multiple(load_ganged_session)[:2]
+                ganged_source_p = abs(ganged_source_v * ganged_source_i)
+                ganged_load_p = abs(ganged_load_v * ganged_load_i)
+                eff = (ganged_load_p / ganged_source_p) * 100
+                efficiency.append(eff)
 
+                # Load measurements
+                load_currents.append(abs(ganged_load_i))
+                load_voltages.append(ganged_load_v)
 
-    abort(load_ganged_session)
-    abort(source_ganged_session)
-
-    output_enabled(load_ganged_session, output_enabled=False)
-    output_connected(load_ganged_session, output_connected=False)
-    reset(load_ganged_session)
-    close(load_ganged_session)
-
-    output_enabled(source_ganged_session, output_enabled=False)
-    output_connected(source_ganged_session, output_connected=False)
-    reset(source_ganged_session)
-    close(source_ganged_session)
+                # Load voltage deviation
+                load_voltage_deviation.append(((load_voltages[-1] - nominal_output_voltage) / nominal_output_voltage) * 100)
+    except Exception:
+        logging.exception("Measurement execution failed")
+        raise
+    finally:
+        _cleanup_ganged_session(load_ganged_session, "load")
+        _cleanup_ganged_session(source_ganged_session, "source")
 
 
-    # if mode_of_operation == ModeOfOperation.Power_On_DUT:
-    #     res = power_on_dut(source_resource_name, source_device_channel, source_start_voltage, source_current_limit)
-    #     status = format_power_on_result(res[0], res[1])
-    #     pass
-
-    # elif mode_of_operation == ModeOfOperation.PerformMeasurement:
-
-    #     if load_sweep_type.lower() == 'logarithmic':
-    #         load_sweep_type_enum = SweepType.Logarithmic
-    #     elif load_sweep_type.lower() != 'linear':
-    #         raise ValueError(f'{load_sweep_type} Sweep Type is not supported ')
-
-    #     source_session = Session(source_resource_name, source_device_channel)
-    #     load_session = Session(load_resource_name, load_device_channel)
-    #     try:
-    #         voltage_values = generate_sequence(
-    #             SweepType.Linear,
-    #             source_start_voltage,
-    #             source_stop_voltage,
-    #             source_voltage_sweep_points
-    #         )
-    #         initiate_source(
-    #             source_session,
-    #             source_device_channel,
-    #             source_start_voltage,
-    #             source_current_limit,
-    #             source_maximum_power,
-    #             dut_setup_time
-    #         )
-    #         initiate_load(
-    #             load_session,
-    #             load_device_channel,
-    #             load_start_current,
-    #             load_voltage_limit_range,
-    #             dut_setup_time
-    #         )
-    #         current_results = generate_sequence(
-    #             load_sweep_type_enum,
-    #             load_start_current,
-    #             load_stop_current,
-    #             load_current_sweep_points_points_per_decade
-    #         )
-
-    #         load_sweep_points = len(current_results)
-    #         current_values = len(voltage_values) * current_results
-
-    #         configure_source(
-    #             source_session,
-    #             source_device_channel,
-    #             voltage_values,
-    #             source_current_limit,
-    #             source_maximum_power,
-    #             load_sweep_points,
-    #             source_delay,
-    #             aperture_time
-    #         )
-    #         configure_load(
-    #             load_session,
-    #             load_device_channel,
-    #             current_values,
-    #             load_voltage_limit_range,
-    #             aperture_time,
-    #             build_trigger_terminal(source_resource_name, source_device_channel, 'SourceTrigger'),
-    #             build_trigger_terminal(source_resource_name, source_device_channel, 'SourceCompleteEvent')
-    #         )
-
-    #         load_session.channels[load_device_channel].initiate()
-    #         source_session.channels[source_device_channel].initiate()
-
-    #         load_session.channels[load_device_channel].wait_for_event(event_id=Event.SEQUENCE_ENGINE_DONE)
-    #         source_sweep_points = len(voltage_values)
-
-    #         gen = perform_measurements(
-    #             source_session,
-    #             source_device_channel,
-    #             load_session,
-    #             load_device_channel,
-    #             voltage_values,
-    #             load_sweep_points,
-    #             nominal_output_voltage,
-    #             load_currents,
-    #             load_voltages,
-    #             efficiency,
-    #             load_voltage_deviation
-    #         )
-    #         for _ in gen:
-    #             yield (
-    #                 status,
-    #                 voltage_values,
-    #                 source_sweep_points,
-    #                 load_sweep_points,
-    #                 load_currents,
-    #                 efficiency,
-    #                 load_voltages,
-    #                 load_voltage_deviation,
-    #             )
-    #             pass
-
-    #         reset_sessions(source_session, source_device_channel, load_session, load_device_channel)
-    #         status = 'The measurement is performed successfully'
-
-    #     except Exception:
-    #         reset_sessions(source_session, source_device_channel, load_session, load_device_channel)
-    #         raise
-    #     pass
-
-    # elif mode_of_operation == ModeOfOperation.Power_Off_DUT:
-    #     power_off_dut(source_resource_name, source_device_channel, load_resource_name, load_device_channel)
-    #     status = 'The DUT is powered off'
-    #     pass
     # Measure logic end
     return (
         # status,

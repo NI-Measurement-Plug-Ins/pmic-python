@@ -280,8 +280,14 @@ def wait_for_event(ganged_session: GangedSession, event: Event=Event.SOURCE_COMP
 
 
 def abort(ganged_session: GangedSession):
-    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
-        session.channels[channel].abort()
+    with ThreadPoolExecutor(max_workers=len(ganged_session.session_list)) as executor:
+        futures = [
+            executor.submit(session.channels[channel].abort)
+            for session, channel in zip(ganged_session.session_list, ganged_session.channel)
+        ]
+
+        for future in futures:
+            future.result()
     
     return
 
@@ -351,8 +357,14 @@ def measure_multiple(ganged_session: GangedSession, count: int=1, timeout: float
 
 
 def output_connected(ganged_session: GangedSession, output_connected: bool):
-    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
-        session.channels[channel].output_connected = output_connected
+    with ThreadPoolExecutor(max_workers=len(ganged_session.session_list)) as executor:
+        futures = [
+            executor.submit(setattr, session.channels[channel], "output_connected", output_connected)
+            for session, channel in zip(ganged_session.session_list, ganged_session.channel)
+        ]
+
+        for future in futures:
+            future.result()
     
     return
 
