@@ -41,5 +41,14 @@ Download the latest NI package from the releases section of this repo or add the
 ## Getting Started
 When you are ready to start using the software, check out [this](docs/help.md).
 
+## Channel Ganging API at a Glance
+
+- Build role assignments with `channel_list()`.
+- Open grouped sessions with `initialize()`.
+- Configure source mode, limits, ranges, and triggers.
+- Start output with `initiate()`.
+- Wait for completion with `wait_for_event()` and read values with `measure_multiple()`.
+- Stop safely with `abort()` and always release resources with `close()`.
+
 ## Contributing
 Use the instructions in [software development](docs/sw-dev.md) for setting up a development environment and overview of the code.

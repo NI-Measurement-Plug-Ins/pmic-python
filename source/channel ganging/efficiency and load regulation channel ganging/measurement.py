@@ -5,7 +5,7 @@ import sys
 import click
 import ni_measurementlink_service as nims
 
-from configure_dc_power import *
+# from configure_dc_power import *
 from nidcpower_channel_ganging import *
 
 script_or_exe = sys.executable if getattr(sys, "frozen", False) else __file__
