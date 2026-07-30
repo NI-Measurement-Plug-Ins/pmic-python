@@ -566,6 +566,45 @@ def measure_multiple(ganged_session: GangedSession, count: int=1, timeout: float
     return ganged_voltage_measurements, ganged_current_measurements, voltage_measurements, current_measurements
 
 
+def fetch_multiple(ganged_session: GangedSession, count: int=1, timeout: float=1.0) -> tuple[float, float, list, list]:
+    """Fetch voltage/current measurements and combine them into ganged equivalents.
+
+    Returns ganged voltage, ganged current, and per-channel voltage/current lists.
+
+    Args:
+        ganged_session: Target ganged NI-DCPower session.
+        count: Number of measurements to fetch per channel.
+        timeout: Fetch timeout in seconds.
+
+    Returns:
+        Tuple of ganged voltage, ganged current, per-channel voltages, and per-channel currents.
+
+    Notes:
+        For parallel ganging, ganged voltage is the mean and ganged current is the sum.
+        For series ganging, ganged voltage is the sum and ganged current is the mean.
+    """
+    voltage_measurements = []
+    current_measurements = []
+    measure_record_dt = []
+    ganged_voltage_measurements = []
+    ganged_current_measurements = []
+    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
+        measurements = session.channels[channel].fetch_multiple(count=count, timeout=timeout)
+
+        for measurement in measurements:
+            voltage_measurements.append(measurement.voltage)
+            current_measurements.append(measurement.current)
+
+        measure_record_dt.append(session.channels[channel].measure_record_dt)
+
+    if ganged_session.ganged_config == GangedConfig.PARALLEL:
+        for i, (voltage, current) in enumerate(zip(voltage_measurements, current_measurements)):
+            
+        ganged_voltage_measurements = mean(voltage_measurements)
+        ganged_current_measurements = sum(current_measurements)
+    return measure_multiple(ganged_session=ganged_session, count=count, timeout=timeout)
+
+
 def output_connected(ganged_session: GangedSession, output_connected: bool):
     """Connect or disconnect output relays for all channels in parallel."""
     with ThreadPoolExecutor(max_workers=len(ganged_session.session_list)) as executor:
@@ -636,4 +675,19 @@ def configure_aperture_time(ganged_session: GangedSession, aperture_time: float)
         session.channels[channel].aperture_time = aperture_time
     
     return
+
+
+def configure_measure_record_length(ganged_session: GangedSession, record_length: int):
+    """Set measure record length for all channels in the ganged session."""
+    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
+        session.channels[channel].measure_record_length = record_length
     
+    return
+
+def configure_slew_rate(ganged_session: GangedSession, rising_slew_rate: float, falling_slew_rate: float):
+    """Set rising and falling slew rates for all channels in the ganged session."""
+    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
+        session.channels[channel].rising_slew_rate = rising_slew_rate
+        session.channels[channel].falling_slew_rate = falling_slew_rate
+    
+    return
