@@ -566,43 +566,54 @@ def measure_multiple(ganged_session: GangedSession, count: int=1, timeout: float
     return ganged_voltage_measurements, ganged_current_measurements, voltage_measurements, current_measurements
 
 
-def fetch_multiple(ganged_session: GangedSession, count: int=1, timeout: float=1.0) -> tuple[float, float, list, list]:
-    """Fetch voltage/current measurements and combine them into ganged equivalents.
-
-    Returns ganged voltage, ganged current, and per-channel voltage/current lists.
+def fetch_multiple(ganged_session: GangedSession, count: int=1, timeout: float=1.0) -> tuple[list[float], list[float]]:
+    """Fetch waveform measurements and combine channels into ganged waveforms.
 
     Args:
         ganged_session: Target ganged NI-DCPower session.
-        count: Number of measurements to fetch per channel.
+        count: Number of samples to fetch per channel.
         timeout: Fetch timeout in seconds.
 
     Returns:
-        Tuple of ganged voltage, ganged current, per-channel voltages, and per-channel currents.
+        Tuple of (ganged_voltages, ganged_currents), each a list of sample values.
 
     Notes:
-        For parallel ganging, ganged voltage is the mean and ganged current is the sum.
-        For series ganging, ganged voltage is the sum and ganged current is the mean.
+        Parallel ganging: voltage is channel mean, current is channel sum.
+        Series ganging: voltage is channel sum, current is channel mean.
     """
-    voltage_measurements = []
-    current_measurements = []
-    measure_record_dt = []
-    ganged_voltage_measurements = []
-    ganged_current_measurements = []
-    for session, channel in zip(ganged_session.session_list, ganged_session.channel):
+    per_channel_voltages: list[list[float]] = []
+    per_channel_currents: list[list[float]] = []
+
+    for session, channel, mode in zip(ganged_session.session_list, ganged_session.channel, ganged_session.session_mode):
         measurements = session.channels[channel].fetch_multiple(count=count, timeout=timeout)
+        channel_voltages = [measurement.voltage for measurement in measurements]
+        channel_currents = [measurement.current for measurement in measurements]
 
-        for measurement in measurements:
-            voltage_measurements.append(measurement.voltage)
-            current_measurements.append(measurement.current)
+        if mode == ChannelMode.SLAVE_INVERTED:
+            channel_currents = [-current for current in channel_currents]
 
-        measure_record_dt.append(session.channels[channel].measure_record_dt)
+        per_channel_voltages.append(channel_voltages)
+        per_channel_currents.append(channel_currents)
 
-    if ganged_session.ganged_config == GangedConfig.PARALLEL:
-        for i, (voltage, current) in enumerate(zip(voltage_measurements, current_measurements)):
-            
-        ganged_voltage_measurements = mean(voltage_measurements)
-        ganged_current_measurements = sum(current_measurements)
-    return measure_multiple(ganged_session=ganged_session, count=count, timeout=timeout)
+    if not per_channel_voltages:
+        return [], []
+
+    sample_count = min(len(channel_voltages) for channel_voltages in per_channel_voltages)
+    ganged_voltage_measurements: list[float] = []
+    ganged_current_measurements: list[float] = []
+
+    for sample_index in range(sample_count):
+        sample_voltages = [channel_voltages[sample_index] for channel_voltages in per_channel_voltages]
+        sample_currents = [channel_currents[sample_index] for channel_currents in per_channel_currents]
+
+        if ganged_session.ganged_config == GangedConfig.PARALLEL:
+            ganged_voltage_measurements.append(mean(sample_voltages))
+            ganged_current_measurements.append(sum(sample_currents))
+        elif ganged_session.ganged_config == GangedConfig.SERIES:
+            ganged_voltage_measurements.append(sum(sample_voltages))
+            ganged_current_measurements.append(mean(sample_currents))
+
+    return ganged_voltage_measurements, ganged_current_measurements
 
 
 def output_connected(ganged_session: GangedSession, output_connected: bool):
@@ -687,7 +698,7 @@ def configure_measure_record_length(ganged_session: GangedSession, record_length
 def configure_slew_rate(ganged_session: GangedSession, rising_slew_rate: float, falling_slew_rate: float):
     """Set rising and falling slew rates for all channels in the ganged session."""
     for session, channel in zip(ganged_session.session_list, ganged_session.channel):
-        session.channels[channel].rising_slew_rate = rising_slew_rate
-        session.channels[channel].falling_slew_rate = falling_slew_rate
+        session.channels[channel].current_level_rising_slew_rate = rising_slew_rate
+        session.channels[channel].current_level_falling_slew_rate = falling_slew_rate
     
     return

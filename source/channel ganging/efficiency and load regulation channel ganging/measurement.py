@@ -7,6 +7,7 @@ import ni_measurementlink_service as nims
 
 # from configure_dc_power import *
 from nidcpower_channel_ganging import *
+from datetime import timedelta
 
 script_or_exe = sys.executable if getattr(sys, "frozen", False) else __file__
 service_directory = pathlib.Path(script_or_exe).resolve().parent
@@ -84,8 +85,8 @@ def _cleanup_ganged_session(ganged_session, session_label: str) -> None:
 @measurement_service.configuration('Load current compensation frequency', nims.DataType.Double, 180000.0)
 @measurement_service.configuration('Load current pole-zero ratio', nims.DataType.Double, 0.3)
 @measurement_service.configuration('Enable load transient test?', nims.DataType.Boolean, False)
-@measurement_service.configuration('Load current set point 1', nims.DataType.Double, 1.0)
-@measurement_service.configuration('Load current set point 2', nims.DataType.Double, 20.0)
+@measurement_service.configuration('Load current set point 1', nims.DataType.Double, 4.0)
+@measurement_service.configuration('Load current set point 2', nims.DataType.Double, 14.0)
 @measurement_service.configuration('Load current rising slew rate', nims.DataType.Double, 24.0)
 @measurement_service.configuration('Load current falling slew rate', nims.DataType.Double, 24.0)
 @measurement_service.configuration('Level dwell time', nims.DataType.Double, 0.001)
@@ -100,6 +101,7 @@ def _cleanup_ganged_session(ganged_session, session_label: str) -> None:
 @measurement_service.output('Load voltage deviation', nims.DataType.DoubleArray1D)
 @measurement_service.output('Ganged load transient currents', nims.DataType.DoubleArray1D)
 @measurement_service.output('Ganged load transient voltages', nims.DataType.DoubleArray1D)
+@measurement_service.output('Measure record dt', nims.DataType.Double)
 def measure(
         dut_setup_time: float,
         source_delay: float,
@@ -158,6 +160,9 @@ def measure(
     efficiency: list[float] = []
     load_voltages: list[float] = []
     load_voltage_deviation: list[float] = []
+    ganged_load_transient_currents: list[float] = []
+    ganged_load_transient_voltages: list[float] = []
+    measure_record_dt = 0
     # Measure logic start
 
     try:
@@ -195,7 +200,12 @@ def measure(
         configure_voltage_limit(load_ganged_session, load_voltage_limit_high, load_voltage_limit_low, load_limit_symmetry)
         configure_voltage_limit_range(load_ganged_session, load_voltage_limit_range)
         configure_current_level_range(load_ganged_session, load_current_level_range)
-        configure_current_level(load_ganged_session, load_stop_current)
+
+        if load_transient_test_enabled:
+            configure_current_level(load_ganged_session, load_transient_current_set_point_1)
+        else:
+            configure_current_level(load_ganged_session, load_stop_current)
+
         configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
         configure_source_delay(load_ganged_session, source_delay=dut_setup_time)
         output_enabled(load_ganged_session, output_enabled=True)
@@ -209,27 +219,49 @@ def measure(
         if load_transient_test_enabled:
             configure_source_mode(load_ganged_session, source_mode=SourceMode.SEQUENCE)
             configure_output_function(load_ganged_session, output_function=OutputFunction.DC_CURRENT)
-            configure_source_delay(load_ganged_session, source_delay=source_delay)
-            configure_aperture_time(load_ganged_session, aperture_time=aperture_time)
+            configure_source_delay(load_ganged_session, source_delay=0)
+            configure_aperture_time(load_ganged_session, aperture_time=0)
 
-            measure_record_length = (1 / aperture_time) * load_transient_level_dwell_time
-            configure_measure_record_length(load_ganged_session, record_length=int(record_length))
+            measure_record_length = 1.8e6 * load_transient_level_dwell_time
+            configure_measure_record_length(load_ganged_session, record_length=int(measure_record_length))
 
             configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
             configure_slew_rate(load_ganged_session, load_transient_current_rising_slew_rate, load_transient_current_falling_slew_rate)
 
             load_transient_sequence = [load_transient_current_set_point_1, load_transient_current_set_point_2, load_transient_current_set_point_1]
-            set_sequence(load_ganged_session, values=load_transient_sequence, source_delays=source_delay, output_function=OutputFunction.DC_CURRENT)
+            set_sequence(load_ganged_session, values=load_transient_sequence, source_delays=0, output_function=OutputFunction.DC_CURRENT)
 
             commit(load_ganged_session)
 
             measure_record_dt = load_ganged_session.session_list[0].measure_record_delta_time
+            measure_record_dt = measure_record_dt.total_seconds()
             fetch_count = measure_record_length * 3
 
             initiate(load_ganged_session)
             wait_for_event(load_ganged_session, event=Event.SEQUENCE_ENGINE_DONE, timeout=timeout)
 
+            ganged_load_transient_voltages, ganged_load_transient_currents = fetch_multiple(load_ganged_session, count=int(fetch_count), timeout=timeout)
+            abort(load_ganged_session)
+            abort(source_ganged_session)
 
+            # Recreate a clean load session so transient-specific state does not leak into sweep measurements.
+            _cleanup_ganged_session(load_ganged_session, "load-transient")
+            load_ganged_session = initialize(load_channel_list, ganged_config=load_system_config)
+            configure_source_mode(load_ganged_session, source_mode=SourceMode.SINGLE_POINT)
+            configure_sense(load_ganged_session, sense=Sense(load_sense))
+            configure_output_function(load_ganged_session, output_function=OutputFunction.DC_CURRENT)
+            configure_voltage_limit(load_ganged_session, load_voltage_limit_high, load_voltage_limit_low, load_limit_symmetry)
+            configure_voltage_limit_range(load_ganged_session, load_voltage_limit_range)
+            configure_current_level_range(load_ganged_session, load_current_level_range)
+            configure_current_level(load_ganged_session, load_stop_current)
+            configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
+            configure_source_delay(load_ganged_session, source_delay=dut_setup_time)
+            output_enabled(load_ganged_session, output_enabled=True)
+            configure_triggers(load_ganged_session)
+            commit(load_ganged_session)
+            initiate(load_ganged_session)
+            wait_for_event(load_ganged_session, timeout=timeout)
+            abort(load_ganged_session)
 
         ## Configure source to sequence
         configure_source_mode(source_ganged_session, source_mode=SourceMode.SEQUENCE)
@@ -244,6 +276,7 @@ def measure(
         configure_transient_response(load_ganged_session, TransientResponse(load_transient_response), OutputFunction.DC_CURRENT, load_current_gain_bandwidth, load_current_compensation_frequency, load_current_pole_zero_ratio)
         configure_source_delay(load_ganged_session, source_delay=source_delay)
         configure_aperture_time(load_ganged_session, aperture_time=aperture_time)
+        # configure_measure_record_length(load_ganged_session, record_length=1)
         load_sweep_values = generate_sequence(load_sweep_type_enum, load_start_current, load_stop_current, load_current_sweep_points_points_per_decade)
 
         source_sweep_points = len(source_sweep_values)
@@ -313,6 +346,9 @@ def measure(
         load_currents,
         load_voltages,
         load_voltage_deviation,
+        ganged_load_transient_currents,
+        ganged_load_transient_voltages,
+        measure_record_dt
     )
 
 
