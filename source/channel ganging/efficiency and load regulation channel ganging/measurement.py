@@ -162,6 +162,7 @@ def measure(
     # Measure logic start
 
     try:
+        # Validate and map the user-provided sweep type.
         if load_sweep_type.lower() == 'logarithmic':
             load_sweep_type_enum = SweepType.Logarithmic
         elif load_sweep_type.lower() != 'linear':
@@ -248,6 +249,7 @@ def measure(
 
             configure_slew_rate(load_ganged_session, load_transient_current_rising_slew_rate, load_transient_current_falling_slew_rate)
 
+            # 3-level transient sequence: setpoint1 -> setpoint2 -> setpoint1.
             load_transient_sequence = [load_transient_current_set_point_1, load_transient_current_set_point_2, load_transient_current_set_point_1]
             set_sequence(load_ganged_session, values=load_transient_sequence, source_delays=0, output_function=OutputFunction.DC_CURRENT)
 
@@ -323,6 +325,7 @@ def measure(
 
         source_sweep_points = len(source_sweep_values)
         load_sequence = []
+        # Build a Cartesian sweep: for each source point, iterate all load points.
         for _ in range(source_sweep_points):
             for current in load_sweep_values:
                 load_sequence.append(current)
@@ -331,6 +334,7 @@ def measure(
 
         load_sweep_points = len(load_sweep_values)
         source_sequence = []
+        # Source sequence repeats each source voltage for every load sweep point.
         for voltage in source_sweep_values:
             for _ in range(load_sweep_points):
                 source_sequence.append(voltage)
@@ -361,6 +365,7 @@ def measure(
                 ganged_load_v, ganged_load_i = measure_multiple(load_ganged_session)[:2]
                 ganged_source_p = abs(ganged_source_v * ganged_source_i)
                 ganged_load_p = abs(ganged_load_v * ganged_load_i)
+                # Efficiency (%) = |Pout| / |Pin| * 100.
                 eff = (ganged_load_p / ganged_source_p) * 100
                 efficiency.append(eff)
 
@@ -369,6 +374,7 @@ def measure(
                 load_voltages.append(ganged_load_v)
 
                 # Load voltage deviation
+                # Deviation (%) = (Vmeas - Vnominal) / Vnominal * 100.
                 load_voltage_deviation.append(((load_voltages[-1] - nominal_output_voltage) / nominal_output_voltage) * 100)
 
     except Exception:
@@ -379,6 +385,7 @@ def measure(
         _cleanup_ganged_session(source_ganged_session, "source")
 
     # Measure logic end
+    # Output tuple order must remain stable for the service contract.
     return (
         # status,
         voltage_values,
