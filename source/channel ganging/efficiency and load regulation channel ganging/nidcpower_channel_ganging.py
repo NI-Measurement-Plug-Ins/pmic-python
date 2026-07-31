@@ -1,8 +1,4 @@
 #TODO:
-# - wait_for_event() function - figure out how this works for ganged, LV uses a parallel For, this might be needed here as well
-# - Above also true for function(s): abort(), output_connected()
-# - measure_multiple() requires 'yield' instead of 'return'?
-# - Error handling
 # - channel_list() function - consider including parameter for Slave-Inverted? 
 # - Check Channel List subVI in Ganged Initialize - is it needed?
 # - configure_triggers() function - better way to slice/access slave resources?
@@ -451,8 +447,6 @@ def wait_for_event(ganged_session: GangedSession, event: Event=Event.SOURCE_COMP
             future.result()
     
     return
-    
-    # CHECK TODO at the top, may need to implement parallel For
 
 
 def abort(ganged_session: GangedSession):
@@ -646,7 +640,14 @@ def close(ganged_session: GangedSession):
     return
 
 
-def configure_transient_response(ganged_session: GangedSession, response: TransientResponse, output_function: OutputFunction, gain_bandwidth: float, compensation_frequency: float, pole_zero_ratio: float):
+def configure_transient_response(
+        ganged_session: GangedSession,
+        response: TransientResponse,
+        output_function: OutputFunction,
+        gain_bandwidth: float,
+        compensation_frequency: float,
+        pole_zero_ratio: float
+):
     """Configure transient-response tuning parameters for voltage or current output mode.
 
     Args:
