@@ -5,7 +5,7 @@ import sys
 import click
 import ni_measurementlink_service as nims
 
-from configure_dc_power import *
+from configure_dc_power import * #for setting power supply and eload configuration
 
 script_or_exe = sys.executable if getattr(sys, "frozen", False) else __file__
 service_directory = pathlib.Path(script_or_exe).resolve().parent
