@@ -32,7 +32,7 @@ def create_sweep_frequencies(
 def configure_source_resource(
     resource: nidcpower.Session, voltage: float, current_limit: float, remote_sense: str = "REMOTE"
 ) -> None:
-    """Configure and start an SMU as a DC voltage source."""
+    """Configure and start an Source resource as a DC voltage source."""
     resource.output_function = nidcpower.OutputFunction.DC_VOLTAGE
     resource.sense = nidcpower.Sense[remote_sense.strip().upper()]  # LOCAL (2-wire) or REMOTE (4-wire)
     resource.voltage_level_range = voltage
@@ -46,14 +46,17 @@ def configure_source_resource(
 def configure_load_resource(
     resource: nidcpower.Session, current: float, voltage_limit: float, remote_sense: str = "REMOTE"
 ) -> None:
-    """Configure and start an SMU as a DC current sink (draws ``current``)."""
+    """Configure and start load resource as a DC current sink (draws ``current``)."""
     resource.output_function = nidcpower.OutputFunction.DC_CURRENT
     resource.sense = nidcpower.Sense[remote_sense.strip().upper()]  # LOCAL (2-wire) or REMOTE (4-wire)
     resource.current_level_range = current
     resource.voltage_limit_autorange = False  # fixed range for predictable compliance
     resource.voltage_limit_range = voltage_limit
     resource.voltage_limit = voltage_limit
-    resource.current_level = -current  # negative level sinks current from the DUT
+    if resource.instrument_model == "NI PXIe-4151":  # this model sinks with a positive level
+        resource.current_level = current
+    else:
+        resource.current_level = -current  # sinks current from the DUT
     resource.initiate()  # start sinking
 
 

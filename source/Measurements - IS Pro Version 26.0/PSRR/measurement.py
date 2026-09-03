@@ -61,12 +61,12 @@ measurement_service = nims.MeasurementService(
 @measurement_service.configuration("Source resource name", nims.DataType.String, "NISMU1")
 @measurement_service.configuration("Source voltage level", nims.DataType.Double, 20.0)
 @measurement_service.configuration("Source current limit", nims.DataType.Double, 0.5)
-@measurement_service.configuration("Source remote sense", nims.DataType.String, "REMOTE")
+@measurement_service.configuration("Source remote sense", nims.DataType.String, "Remote")
 # Load Configuration
 @measurement_service.configuration("Load resource name", nims.DataType.String, "NISMU2")
 @measurement_service.configuration("Load current level", nims.DataType.Double, 0.050)
 @measurement_service.configuration("Load voltage limit", nims.DataType.Double, 5.0)
-@measurement_service.configuration("Load remote sense", nims.DataType.String, "REMOTE")
+@measurement_service.configuration("Load remote sense", nims.DataType.String, "Remote")
 # FGEN Configuration
 @measurement_service.configuration("FGEN resource name", nims.DataType.String, "NIFGEN")
 @measurement_service.configuration("FGEN load impedance", nims.DataType.Double, 1.0e6)
@@ -74,8 +74,8 @@ measurement_service = nims.MeasurementService(
 @measurement_service.configuration("FGEN start frequency", nims.DataType.Double, 10.0)
 @measurement_service.configuration("FGEN stop frequency", nims.DataType.Double, 10.0e6)
 @measurement_service.configuration("FGEN sweep type", nims.DataType.String, "Logarithmic")
-@measurement_service.configuration("FGEN points/ points per decade", nims.DataType.Int32, 8)
-@measurement_service.configuration("FGEN settle time (s)", nims.DataType.Double, 1.0)
+@measurement_service.configuration("FGEN points or points per decade", nims.DataType.Int32, 8)
+@measurement_service.configuration("FGEN settle time", nims.DataType.Double, 1.0)
 # Scope Configuration
 @measurement_service.configuration("Scope resource name", nims.DataType.String, "NISCOPE1")
 @measurement_service.configuration("Scope input channel", nims.DataType.String, "0")
@@ -87,7 +87,7 @@ measurement_service = nims.MeasurementService(
 @measurement_service.configuration("Scope input impedance", nims.DataType.Double, 1.0e6)
 @measurement_service.configuration("Scope probe attenuation Vin", nims.DataType.Double, 10.0)
 @measurement_service.configuration("Scope probe attenuation Vout", nims.DataType.Double, 10.0)
-@measurement_service.configuration("Scope vout range (V)", nims.DataType.Double, 0.05)
+@measurement_service.configuration("Scope vout range", nims.DataType.Double, 0.05)
 # Outputs
 @measurement_service.output("Status", nims.DataType.String)
 @measurement_service.output("Frequency (Hz)", nims.DataType.DoubleArray1D)
