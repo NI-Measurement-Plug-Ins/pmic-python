@@ -15,49 +15,56 @@ import niscope
 import numpy as np
 
 
-def build_log_frequencies(
-    freq_start: float, freq_stop: float, points_per_decade: int
+def create_sweep_frequencies(
+    freq_start: float, freq_stop: float, points_per_decade: int, sweep_type: str = "Logarithmic"
 ) -> np.ndarray:
-    """Return log-spaced sweep frequencies with ``points_per_decade`` density."""
-    num_decades = math.log10(freq_stop / freq_start)
-    num_points = int(round(points_per_decade * num_decades)) + 1
-    return np.logspace(math.log10(freq_start), math.log10(freq_stop), num_points)
+    """Return sweep frequencies for a ``Linear`` or ``Logarithmic`` sweep.
+
+    Point density is derived from ``points_per_decade`` for both sweep types.
+    """
+    num_decades = math.log10(freq_stop / freq_start)  # span of the sweep in decades
+    num_points = int(round(points_per_decade * num_decades)) + 1  # +1 to include the endpoint
+    if sweep_type.strip().lower().startswith("lin"):  # accept "Linear", "lin", etc.
+        return np.linspace(freq_start, freq_stop, num_points)  # evenly spaced in frequency
+    return np.logspace(math.log10(freq_start), math.log10(freq_stop), num_points)  # spaced in log-f
 
 
-def configure_source_smu(
-    smu: nidcpower.Session, voltage: float, current_limit: float
+def configure_source_resource(
+    resource: nidcpower.Session, voltage: float, current_limit: float, remote_sense: str = "REMOTE"
 ) -> None:
     """Configure and start an SMU as a DC voltage source."""
-    smu.output_function = nidcpower.OutputFunction.DC_VOLTAGE
-    smu.voltage_level_range = voltage
-    smu.current_limit_autorange = False
-    smu.current_limit_range = current_limit
-    smu.current_limit = current_limit
-    smu.voltage_level = voltage
-    smu.initiate()
+    resource.output_function = nidcpower.OutputFunction.DC_VOLTAGE
+    resource.sense = nidcpower.Sense[remote_sense.strip().upper()]  # LOCAL (2-wire) or REMOTE (4-wire)
+    resource.voltage_level_range = voltage
+    resource.current_limit_autorange = False  # fixed range for predictable compliance
+    resource.current_limit_range = current_limit
+    resource.current_limit = current_limit
+    resource.voltage_level = voltage
+    resource.initiate()  # start sourcing
 
 
-def configure_load_smu(
-    smu: nidcpower.Session, current: float, voltage_limit: float
+def configure_load_resource(
+    resource: nidcpower.Session, current: float, voltage_limit: float, remote_sense: str = "REMOTE"
 ) -> None:
     """Configure and start an SMU as a DC current sink (draws ``current``)."""
-    smu.output_function = nidcpower.OutputFunction.DC_CURRENT
-    smu.current_level_range = current
-    smu.voltage_limit_autorange = False
-    smu.voltage_limit_range = voltage_limit
-    smu.voltage_limit = voltage_limit
-    smu.current_level = -current
-    smu.initiate()
+    resource.output_function = nidcpower.OutputFunction.DC_CURRENT
+    resource.sense = nidcpower.Sense[remote_sense.strip().upper()]  # LOCAL (2-wire) or REMOTE (4-wire)
+    resource.current_level_range = current
+    resource.voltage_limit_autorange = False  # fixed range for predictable compliance
+    resource.voltage_limit_range = voltage_limit
+    resource.voltage_limit = voltage_limit
+    resource.current_level = -current  # negative level sinks current from the DUT
+    resource.initiate()  # start sinking
 
 
-def setup_fgen(
+def configure_fgen(
     fgen: nifgen.Session, load_impedance: float, vpp: float, freq: float
 ) -> None:
     """Put the FGEN in standard-function mode and start a sine output."""
-    fgen.output_mode = nifgen.OutputMode.FUNC
+    fgen.output_mode = nifgen.OutputMode.FUNC  # standard-function (sine) generation
     fgen.load_impedance = load_impedance
     configure_fgen_sine(fgen, vpp, freq)
-    fgen.initiate()
+    fgen.initiate()  # start generating
 
 
 def configure_fgen_sine(fgen: nifgen.Session, vpp: float, freq: float) -> None:
@@ -70,11 +77,16 @@ def configure_fgen_sine(fgen: nifgen.Session, vpp: float, freq: float) -> None:
     )
 
 
-def configure_scope_channels(scope: niscope.Session, input_impedance: float) -> None:
-    """Set input impedance on both scope channels (Ch0 = Vin, Ch1 = Vout)."""
-    for channel in ("0", "1"):
+def configure_scope_channels(
+    scope: niscope.Session,
+    input_impedance: float,
+    in_channel: str = "0",
+    out_channel: str = "1",
+) -> None:
+    """Set input impedance on both scope channels (in = Vin, out = Vout)."""
+    for channel in (in_channel, out_channel):  # apply to both Vin and Vout channels
         scope.channels[channel].configure_chan_characteristics(
-            input_impedance=input_impedance, max_input_frequency=0.0)
+            input_impedance=input_impedance, max_input_frequency=0.0)  # 0 = full channel bandwidth
 
 
 def compute_acquisition_plan(
@@ -83,19 +95,10 @@ def compute_acquisition_plan(
     scope_min_sr: float,
     scope_max_sr: float,
     num_cycles: int,
-    min_samples: int,
-    max_samples: int,
 ) -> Tuple[float, int]:
-    """Return (sample_rate, num_pts) for a whole number of cycles at ``freq``.
-
-    The record is long enough to average down the noise but bounded so it fits
-    onboard memory and the sweep stays quick.
-    """
-    sample_rate = min(scope_max_sr, max(scope_min_sr, freq * samples_per_cycle))
-    cycles = max(num_cycles, int(math.ceil(min_samples * freq / sample_rate)))
-    if cycles * sample_rate / freq > max_samples:
-        cycles = max(1, int(max_samples * freq / sample_rate))
-    num_pts = int(round(cycles * sample_rate / freq))
+    """Return (sample_rate, num_pts) for a whole number of cycles at ``freq``."""
+    sample_rate = min(scope_max_sr, max(scope_min_sr, freq * samples_per_cycle))  # clamp to scope limits
+    num_pts = int(round(num_cycles * sample_rate / freq))  # captures a whole number of cycles
     return sample_rate, num_pts
 
 
@@ -107,25 +110,28 @@ def acquire_ripple(
     vout_range: float,
     probe_atten_in: float,
     probe_atten_out: float,
+    in_channel: str = "0",
+    out_channel: str = "1",
 ) -> Tuple[Any, Any]:
     """Configure both channels, acquire, and return the (Vin, Vout) waveforms."""
-    scope.channels["0"].configure_vertical(
+    # AC coupling removes the DC operating point so only ripple is captured.
+    scope.channels[in_channel].configure_vertical(
         range=vin_range, coupling=niscope.VerticalCoupling.AC,
         probe_attenuation=probe_atten_in)
-    scope.channels["1"].configure_vertical(
+    scope.channels[out_channel].configure_vertical(
         range=vout_range, coupling=niscope.VerticalCoupling.AC,
         probe_attenuation=probe_atten_out)
     scope.configure_horizontal_timing(
         min_sample_rate=sample_rate, min_num_pts=num_pts,
-        ref_position=50.0, num_records=1, enforce_realtime=True)
-    timeout = hightime.timedelta(seconds=num_pts / sample_rate + 5.0)
-    with scope.initiate():
-        w0 = scope.channels["0"].fetch(num_samples=num_pts, timeout=timeout)[0]
-        w1 = scope.channels["1"].fetch(num_samples=num_pts, timeout=timeout)[0]
+        ref_position=50.0, num_records=1, enforce_realtime=True)  # reference centered in the record
+    timeout = hightime.timedelta(seconds=num_pts / sample_rate + 5.0)  # record time plus margin
+    with scope.initiate():  # arm and acquire
+        w0 = scope.channels[in_channel].fetch(num_samples=num_pts, timeout=timeout)[0]  # Vin waveform
+        w1 = scope.channels[out_channel].fetch(num_samples=num_pts, timeout=timeout)[0]  # Vout waveform
     return w0, w1
 
 
-def ac_rms(samples: Sequence[float]) -> float:
+def compute_ac_rms(samples: Sequence[float]) -> float:
     """Broadband AC RMS [Vrms] (DC component removed) of the acquired record.
 
     Diagnostic only: at small ripple levels this is dominated by the scope
@@ -135,7 +141,7 @@ def ac_rms(samples: Sequence[float]) -> float:
     return float(np.sqrt(np.mean((x - x.mean()) ** 2)))
 
 
-def ac_rms_lockin(samples: Sequence[float], dt: float, freq: float) -> float:
+def compute_ac_rms_lockin(samples: Sequence[float], dt: float, freq: float) -> float:
     """Narrowband AC RMS [Vrms] of the component at ``freq``, time domain only.
 
     Synchronous (lock-in) detection: the record is multiplied by a cosine and a
@@ -147,15 +153,15 @@ def ac_rms_lockin(samples: Sequence[float], dt: float, freq: float) -> float:
     # Trim to a whole number of cycles so the references average exactly to zero.
     samples_per_cycle = 1.0 / (freq * dt)
     n = int(math.floor(x.size / samples_per_cycle) * samples_per_cycle)
-    if n < 4:
+    if n < 4:  # too few samples to trim; use the whole record
         n = x.size
     x = x[:n]
-    x = x - x.mean()
+    x = x - x.mean()  # remove residual DC before correlation
     phase = 2.0 * math.pi * freq * dt * np.arange(n)
-    i_comp = np.mean(x * np.cos(phase))
-    q_comp = np.mean(x * np.sin(phase))
-    peak = 2.0 * math.hypot(i_comp, q_comp)
-    return float(peak / math.sqrt(2.0))
+    i_comp = np.mean(x * np.cos(phase))  # in-phase component
+    q_comp = np.mean(x * np.sin(phase))  # quadrature component
+    peak = 2.0 * math.hypot(i_comp, q_comp)  # amplitude of the tone at ``freq``
+    return float(peak / math.sqrt(2.0))  # peak amplitude -> RMS
 
 
 class TestStandSupport:
