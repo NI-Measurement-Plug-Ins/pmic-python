@@ -33,7 +33,6 @@ import numpy as np    # For numeric array processing
 from ni.protobuf.types.xydata_pb2 import DoubleXYData  # XY container for graph outputs
 
 from _helpers import (
-    compute_ac_rms,
     compute_ac_rms_lockin,
     acquire_ripple,
     compute_acquisition_plan,
@@ -130,16 +129,14 @@ def measure(
     status: str = ""             # Status message for the measurement service
     freq_out: list[float] = []   # Frequencies at which PSRR was measured
     psrr_out: list[float] = []   #PSRR values corresponding to the frequencies in freq_out
-    vin_out: list[float] = []    #Vin ripple values corresponding to the frequencies in freq_out
-    vout_out: list[float] = []   #Vout ripple values corresponding to the frequencies in freq_out
 
     freqs = create_sweep_frequencies(
         fgen_start_frequency, fgen_stop_frequency, fgen_points_per_decade, fgen_sweep_type)
     num_points = len(freqs)                    # Number of frequency points to sweep
     vin_ripple = np.full(num_points, np.nan)   # Vin ripple values corresponding to the frequencies in freqs
     vout_ripple = np.full(num_points, np.nan)  # Vout ripple values corresponding to the frequencies in freqs
-
-    source_session = None  # Sessions created inside try so partial failures still get cleaned up
+    # Sessions created inside try so partial failures still get cleaned up
+    source_session = None 
     load_session = None
     fgen = None
     scope = None
@@ -166,7 +163,7 @@ def measure(
             scope, scope_input_impedance, scope_input_channel, scope_output_channel)
 
         # DC pre-check of Vin and Vout before starting the frequency sweep
-        time.sleep(0.2)
+        time.sleep(fgen_settle_time)  # Wait for the source and load to settle
         m1 = source_session.measure_multiple()[0]
         m2 = load_session.measure_multiple()[0]
         _logger.info("DC pre-check: Vin set=%.3f V meas=%.3f V Iin=%.1f mA",
@@ -200,23 +197,20 @@ def measure(
             # Narrowband lock-in RMS of the ripple at the injection frequency
             vin_ripple[i] = compute_ac_rms_lockin(w0.samples, dt, f)
             vout_ripple[i] = compute_ac_rms_lockin(w1.samples, dt, f)
-            vout_floor = compute_ac_rms(w1.samples)                   # broadband floor, for margin check
 
             # PSRR in dB from the input/output ripple ratio
             psrr = abs(20.0 * math.log10(vout_ripple[i] / vin_ripple[i]))
             # Per-point diagnostic log line
             _logger.info(
                 "[%3d/%d] f=%12.1f Hz  Vin=%8.3f mVrms  Vout=%10.3f uVrms  "
-                "PSRR=%7.2f dB  (floor=%9.1f uVrms)",
+                "PSRR=%7.2f dB",
                 i + 1, num_points, f, vin_ripple[i] * 1e3, vout_ripple[i] * 1e6,
-                psrr, vout_floor * 1e6)
+                psrr)
 
             # Stream the results collected so far so InstrumentStudio updates live.
             status = f"Sweeping {i + 1}/{num_points} ({f:.1f} Hz)"
             freq_out = freqs[: i + 1].tolist()
             psrr_out = np.abs(20.0 * np.log10(vout_ripple[: i + 1] / vin_ripple[: i + 1])).tolist()
-            vin_out = vin_ripple[: i + 1].tolist()
-            vout_out = vout_ripple[: i + 1].tolist()
             psrr_vs_freq = DoubleXYData(x_data=freq_out, y_data=psrr_out)
             yield (status, freq_out, psrr_out, psrr_vs_freq)
 

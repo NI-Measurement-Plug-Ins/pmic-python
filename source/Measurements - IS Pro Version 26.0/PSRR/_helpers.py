@@ -134,16 +134,6 @@ def acquire_ripple(
     return w0, w1
 
 
-def compute_ac_rms(samples: Sequence[float]) -> float:
-    """Broadband AC RMS [Vrms] (DC component removed) of the acquired record.
-
-    Diagnostic only: at small ripple levels this is dominated by the scope
-    noise/quantization floor, not by the signal.
-    """
-    x = np.asarray(samples, dtype=float)
-    return float(np.sqrt(np.mean((x - x.mean()) ** 2)))
-
-
 def compute_ac_rms_lockin(samples: Sequence[float], dt: float, freq: float) -> float:
     """Narrowband AC RMS [Vrms] of the component at ``freq``, time domain only.
 
