@@ -30,6 +30,7 @@ import nidcpower      # For controlling source and load
 import nifgen         # For controlling function generator 
 import niscope        # For controlling oscilloscope for ripple capture
 import numpy as np    # For numeric array processing
+from ni.protobuf.types.xydata_pb2 import DoubleXYData  # XY container for graph outputs
 
 from _helpers import (
     compute_ac_rms,
@@ -92,6 +93,7 @@ measurement_service = nims.MeasurementService(
 @measurement_service.output("Status", nims.DataType.String)
 @measurement_service.output("Frequency (Hz)", nims.DataType.DoubleArray1D)
 @measurement_service.output("PSRR (dB)", nims.DataType.DoubleArray1D)
+@measurement_service.output("PSRR vs Frequency", nims.DataType.DoubleXYData)
 
 def measure(
     nominal_output_voltage: float,
@@ -137,12 +139,17 @@ def measure(
     vin_ripple = np.full(num_points, np.nan)   # Vin ripple values corresponding to the frequencies in freqs
     vout_ripple = np.full(num_points, np.nan)  # Vout ripple values corresponding to the frequencies in freqs
 
-    source_session = nidcpower.Session(resource_name=source_resource_name) # Create a session for the source instrument
-    load_session = nidcpower.Session(resource_name=load_resource_name) # Create a session for the load instrument
-    fgen = nifgen.Session(resource_name=fgen_resource_name) # Create a session for the function generator
-    scope = niscope.Session(resource_name=scope_resource_name) # Create a session for the oscilloscope
+    source_session = None  # Sessions created inside try so partial failures still get cleaned up
+    load_session = None
+    fgen = None
+    scope = None
 
     try:
+        source_session = nidcpower.Session(resource_name=source_resource_name) # Create a session for the source instrument
+        load_session = nidcpower.Session(resource_name=load_resource_name) # Create a session for the load instrument
+        fgen = nifgen.Session(resource_name=fgen_resource_name) # Create a session for the function generator
+        scope = niscope.Session(resource_name=scope_resource_name) # Create a session for the oscilloscope
+
         # Source: DC voltage source
         configure_source_resource(
             source_session, source_voltage_level, source_current_limit, source_remote_sense)
@@ -210,21 +217,26 @@ def measure(
             psrr_out = np.abs(20.0 * np.log10(vout_ripple[: i + 1] / vin_ripple[: i + 1])).tolist()
             vin_out = vin_ripple[: i + 1].tolist()
             vout_out = vout_ripple[: i + 1].tolist()
-            yield (status, freq_out, psrr_out, vin_out, vout_out)
+            psrr_vs_freq = DoubleXYData(x_data=freq_out, y_data=psrr_out)
+            yield (status, freq_out, psrr_out, psrr_vs_freq)
 
     finally:
-        fgen.abort()                            # Stop the function generator output
-        fgen.close()                            # Close the function generator session
-        scope.close()                           # Close the oscilloscope session
-        load_session.output_enabled = False     # Disable the load output
-        load_session.abort()                    # Abort the load session
-        load_session.close()                    # Close the load session
-        source_session.output_enabled = False   # Disable the source output
-        source_session.abort()                  # Abort the source session
-        source_session.close()                  # Close the source session
+        if fgen is not None:
+            fgen.abort()                        # Stop the function generator output
+            fgen.close()                        # Close the function generator session
+        if scope is not None:
+            scope.close()                       # Close the oscilloscope session
+        if load_session is not None:
+            load_session.output_enabled = False # Disable the load output
+            load_session.abort()                # Abort the load session
+            load_session.close()                # Close the load session
+        if source_session is not None:
+            source_session.output_enabled = False   # Disable the source output
+            source_session.abort()              # Abort the source session
+            source_session.close()              # Close the source session
 
     status = "The measurement is performed successfully"
-    return (status, freq_out, psrr_out, vin_out, vout_out)
+    return (status, freq_out, psrr_out, DoubleXYData(x_data=freq_out, y_data=psrr_out))
 
 
 @click.command
