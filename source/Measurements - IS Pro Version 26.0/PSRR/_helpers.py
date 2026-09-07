@@ -30,11 +30,14 @@ def create_sweep_frequencies(
 
 
 def configure_source_resource(
-    resource: nidcpower.Session, voltage: float, current_limit: float, remote_sense: str = "REMOTE"
+    resource: nidcpower.Session,
+    voltage: float,
+    current_limit: float,
+    sense: nidcpower.Sense = nidcpower.Sense.REMOTE,
 ) -> None:
     """Configure and start an Source resource as a DC voltage source."""
     resource.output_function = nidcpower.OutputFunction.DC_VOLTAGE
-    resource.sense = nidcpower.Sense[remote_sense.strip().upper()]  # LOCAL (2-wire) or REMOTE (4-wire)
+    resource.sense = sense  # LOCAL (2-wire) or REMOTE (4-wire)
     resource.voltage_level_range = voltage
     resource.current_limit_autorange = False  # fixed range for predictable compliance
     resource.current_limit_range = current_limit
@@ -44,11 +47,14 @@ def configure_source_resource(
 
 
 def configure_load_resource(
-    resource: nidcpower.Session, current: float, voltage_limit: float, remote_sense: str = "REMOTE"
+    resource: nidcpower.Session,
+    current: float,
+    voltage_limit: float,
+    sense: nidcpower.Sense = nidcpower.Sense.REMOTE,
 ) -> None:
     """Configure and start load resource as a DC current sink (draws ``current``)."""
     resource.output_function = nidcpower.OutputFunction.DC_CURRENT
-    resource.sense = nidcpower.Sense[remote_sense.strip().upper()]  # LOCAL (2-wire) or REMOTE (4-wire)
+    resource.sense = sense  # LOCAL (2-wire) or REMOTE (4-wire)
     resource.current_level_range = current
     resource.voltage_limit_autorange = False  # fixed range for predictable compliance
     resource.voltage_limit_range = voltage_limit
@@ -144,17 +150,17 @@ def compute_ac_rms_lockin(samples: Sequence[float], dt: float, freq: float) -> f
     toward zero, so broadband scope noise is rejected. The magnitude
     sqrt(I^2 + Q^2) is phase independent, so FGEN and scope need not be locked.
     """
-    x = np.asarray(samples, dtype=float)
+    waveform = np.asarray(samples, dtype=float)
     # Trim to a whole number of cycles so the references average exactly to zero.
     samples_per_cycle = 1.0 / (freq * dt)
-    n = int(math.floor(x.size / samples_per_cycle) * samples_per_cycle)
+    n = int(math.floor(waveform.size / samples_per_cycle) * samples_per_cycle)
     if n < 4:  # too few samples to trim; use the whole record
-        n = x.size
-    x = x[:n]
-    x = x - x.mean()  # remove residual DC before correlation
+        n = waveform.size
+    waveform = waveform[:n]
+    waveform = waveform - waveform.mean()  # remove residual DC before correlation
     phase = 2.0 * math.pi * freq * dt * np.arange(n)
-    i_comp = np.mean(x * np.cos(phase))  # in-phase component
-    q_comp = np.mean(x * np.sin(phase))  # quadrature component
+    i_comp = np.mean(waveform * np.cos(phase))  # in-phase component
+    q_comp = np.mean(waveform * np.sin(phase))  # quadrature component
     peak = 2.0 * math.hypot(i_comp, q_comp)  # amplitude of the tone at ``freq``
     return float(peak / math.sqrt(2.0))  # peak amplitude -> RMS
 

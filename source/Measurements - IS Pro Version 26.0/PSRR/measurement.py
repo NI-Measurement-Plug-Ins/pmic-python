@@ -46,11 +46,22 @@ from _helpers import (
 
 _logger = logging.getLogger(__name__)
 
+
+# Map the user-facing sense string to the nidcpower driver enum.
+_SENSE_MAP = {
+    "LOCAL": nidcpower.Sense.LOCAL,
+    "REMOTE": nidcpower.Sense.REMOTE,
+}
+
+
 script_or_exe = sys.executable if getattr(sys, "frozen", False) else __file__
 service_directory = pathlib.Path(script_or_exe).resolve().parent
+# ui_file_paths controls which front-panel GUI InstrumentStudio opens for this measurement.
+# To use a different/additional GUI, add its .measui (or .measurementplugin) path to this list,
+# e.g. [service_directory / "PSRR.measui", service_directory / "OtherView.measui"].
 measurement_service = nims.MeasurementService(
     service_config_path=service_directory / "PSRR_PMIC.serviceconfig",
-    ui_file_paths=[service_directory / "PSRR.measui"],
+    ui_file_paths=[service_directory / "PSRR_PMIC.vi"],
 )
 
 
@@ -79,8 +90,8 @@ measurement_service = nims.MeasurementService(
 @measurement_service.configuration("FGEN points or points per decade", nims.DataType.Int32, 8)
 # Scope Configuration
 @measurement_service.configuration("Scope resource name", nims.DataType.String, "NISCOPE1")
-@measurement_service.configuration("Scope input channel", nims.DataType.String, "0")
-@measurement_service.configuration("Scope output channel", nims.DataType.String, "1")
+@measurement_service.configuration("Scope Vin channel", nims.DataType.String, "0")
+@measurement_service.configuration("Scope Vout channel", nims.DataType.String, "1")
 @measurement_service.configuration("Scope samples per cycle", nims.DataType.Int32, 100_000)
 @measurement_service.configuration("Scope number of cycles", nims.DataType.Int32, 8)
 @measurement_service.configuration("Scope maximum sample rate", nims.DataType.Double, 100.0e6)
@@ -113,8 +124,8 @@ def measure(
     fgen_sweep_type: str,
     fgen_points_per_decade: int,
     scope_resource_name: str,
-    scope_input_channel: str,
-    scope_output_channel: str,
+    scope_vin_channel: str,
+    scope_vout_channel: str,
     scope_samples_per_cycle: int,
     scope_number_of_cycles: int,
     scope_maximum_sample_rate: float,
@@ -149,7 +160,8 @@ def measure(
 
         # Source: DC voltage source
         configure_source_resource(
-            source_session, source_voltage_level, source_current_limit, source_sense)
+            source_session, source_voltage_level, source_current_limit,
+            _SENSE_MAP[source_sense.upper()])
 
         # FGEN: sine at first frequency
         configure_fgen(
@@ -158,11 +170,12 @@ def measure(
 
         # Load: DC current sink
         configure_load_resource(
-            load_session, load_current_level, load_voltage_limit, load_sense)
+            load_session, load_current_level, load_voltage_limit,
+            _SENSE_MAP[load_sense.upper()])
 
         # Scope channel characteristics (in = Vin, out = Vout)
         configure_scope_channels(
-            scope, scope_input_impedance, scope_input_channel, scope_output_channel)
+            scope, scope_input_impedance, scope_vin_channel, scope_vout_channel)
 
         # DC pre-check of Vin and Vout before starting the frequency sweep
         time.sleep(dut_setup_time)  # Wait for the source and load to settle
@@ -193,7 +206,7 @@ def measure(
             w0, w1 = acquire_ripple(
                 scope, sample_rate, num_pts, vin_range, scope_vout_range,
                 scope_probe_attenuation_vin, scope_probe_attenuation_vout,
-                scope_input_channel, scope_output_channel)
+                scope_vin_channel, scope_vout_channel)
 
             # Actual (coerced) sample interval, needed for a correct reference phase.
             dt = w1.x_increment

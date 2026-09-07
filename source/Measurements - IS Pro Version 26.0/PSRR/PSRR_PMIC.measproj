@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<SourceFile Checksum="45C379C12E21531099FA05BA0133A871C1484C2D21AE60D19E992798D99A4020F84B7105887E5560BD63521128915683E687C64C7E275FA176574FC5AEB48A6E" xmlns="http://www.ni.com/PlatformFramework">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SourceFile Checksum="8A4A10355EE5049144BFBA5023A5288ED3749A8D9BA0DB689417FD337CC3BC62337D8A373EEAF6901F1B823DA09A30D8ED230708DB6232B98042DA5B7D4D2E48" xmlns="http://www.ni.com/PlatformFramework">
 	<SourceModelFeatureSet>
-		<ParsableNamespace AssemblyFileVersion="24.8.0.49911" FeatureSetName="InstrumentStudio Measurement UI" Name="http://www.ni.com/InstrumentFramework/ScreenDocument" OldestCompatibleVersion="22.1.0.1" Version="24.8.0.0" />
-		<ParsableNamespace AssemblyFileVersion="9.14.0.49911" FeatureSetName="Editor" Name="http://www.ni.com/PlatformFramework" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
-		<ParsableNamespace AssemblyFileVersion="9.14.0.49911" FeatureSetName="SystemDesigner" Name="http://www.ni.com/SystemDesigner/EnvoyManagement" OldestCompatibleVersion="5.0.0.0" Version="5.0.0.49152" />
-		<ParsableNamespace AssemblyFileVersion="9.14.0.49911" FeatureSetName="SystemDesigner" Name="http://www.ni.com/SystemDesigner/SystemDiagram" OldestCompatibleVersion="8.0.0.49152" Version="8.0.0.49152" />
-		<ParsableNamespace AssemblyFileVersion="9.14.0.49911" FeatureSetName="SystemDesigner" Name="http://www.ni.com/SystemDesigner/SystemModelCore" OldestCompatibleVersion="5.1.0.5" Version="5.2.0.49152" />
-		<ApplicationVersionInfo Build="24.8.0.49911" Name="Measurement Plug-In UI Editor" Version="24.8.0.49911" />
+		<ParsableNamespace AssemblyFileVersion="25.8.1.49696" FeatureSetName="InstrumentStudio Measurement UI" Name="http://www.ni.com/InstrumentFramework/ScreenDocument" OldestCompatibleVersion="22.1.0.1" Version="24.8.0.0" />
+		<ParsableNamespace AssemblyFileVersion="9.18.1.49696" FeatureSetName="Editor" Name="http://www.ni.com/PlatformFramework" OldestCompatibleVersion="8.1.0.49152" Version="8.1.0.49152" />
+		<ParsableNamespace AssemblyFileVersion="9.18.1.49696" FeatureSetName="SystemDesigner" Name="http://www.ni.com/SystemDesigner/EnvoyManagement" OldestCompatibleVersion="5.0.0.0" Version="5.0.0.49152" />
+		<ParsableNamespace AssemblyFileVersion="9.18.1.49696" FeatureSetName="SystemDesigner" Name="http://www.ni.com/SystemDesigner/SystemDiagram" OldestCompatibleVersion="8.0.0.49152" Version="8.0.0.49152" />
+		<ParsableNamespace AssemblyFileVersion="9.18.1.49696" FeatureSetName="SystemDesigner" Name="http://www.ni.com/SystemDesigner/SystemModelCore" OldestCompatibleVersion="5.1.0.5" Version="5.2.0.49152" />
+		<ApplicationVersionInfo Build="25.8.1.49696" Name="Measurement Plug-In UI Editor" Version="25.8.1.49696" />
 	</SourceModelFeatureSet>
 	<Project xmlns="http://www.ni.com/PlatformFramework">
 		<EnvoyManagerRootEnvoy Id="dd27c2d5c720415eb15215bd545c9daa" ModelDefinitionType="EnvoyManagerRootEnvoy" Name="RootEnvoy" />
@@ -15,7 +15,7 @@
 		</EmbeddedDefinitionReference>
 		<NameScopingEnvoy Id="595eaf9348434a23ae9cd79306a9f1cb" ModelDefinitionType="DefaultTarget" Name="DefaultTarget">
 			<DefaultTarget />
-			<SourceFileReference Id="82b9ddbcdf2948238df082fc48b602b7" ModelDefinitionType="{http://www.ni.com/InstrumentFramework/ScreenDocument}Screen" Name="PSRR.measui" StoragePath="PSRR.measui" />
+			<SourceFileReference Id="4d15860231fe4ca3b5d8778f284da1cf" ModelDefinitionType="{http://www.ni.com/InstrumentFramework/ScreenDocument}Screen" Name="PSRR_PMIC.measui" StoragePath="PSRR_PMIC.measui" />
 		</NameScopingEnvoy>
 		<EmbeddedDefinitionReference Id="e346ab41c93c4c81b47bf6d0522b5deb" ModelDefinitionType="NationalInstruments.SystemDesigner.SystemDiagram.SystemDiagramDefinition" Name="SystemDiagram">
 			<SystemDiagram Id="1a63510b9b8443258bb044b34b362c63" SystemDiagramVersion="75" xmlns="http://www.ni.com/SystemDesigner/SystemDiagram">
