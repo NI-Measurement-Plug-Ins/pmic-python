@@ -25,7 +25,7 @@ from typing import Generator, Tuple # For type hinting of generator return value
 
 # Third-party and instrument driver imports
 import click
-import ni_measurement_plugin_sdk_service as nims #
+import ni_measurement_plugin_sdk_service as nims
 import nidcpower      # For controlling source and load
 import nifgen         # For controlling function generator 
 import niscope        # For controlling oscilloscope for ripple capture
@@ -57,25 +57,26 @@ measurement_service = nims.MeasurementService(
 @measurement_service.register_measurement
 #DUT Configuration
 @measurement_service.configuration("Nominal output voltage", nims.DataType.Double, 3.3)
+@measurement_service.configuration("DUT setup time", nims.DataType.Double, 1.0)
 # Source Configuration
 @measurement_service.configuration("Source resource name", nims.DataType.String, "NISMU1")
 @measurement_service.configuration("Source voltage level", nims.DataType.Double, 20.0)
 @measurement_service.configuration("Source current limit", nims.DataType.Double, 0.5)
-@measurement_service.configuration("Source remote sense", nims.DataType.String, "Remote")
+@measurement_service.configuration("Source sense", nims.DataType.String, "Remote")
 # Load Configuration
 @measurement_service.configuration("Load resource name", nims.DataType.String, "NISMU2")
 @measurement_service.configuration("Load current level", nims.DataType.Double, 0.050)
 @measurement_service.configuration("Load voltage limit", nims.DataType.Double, 5.0)
-@measurement_service.configuration("Load remote sense", nims.DataType.String, "Remote")
+@measurement_service.configuration("Load sense", nims.DataType.String, "Remote")
 # FGEN Configuration
 @measurement_service.configuration("FGEN resource name", nims.DataType.String, "NIFGEN")
+@measurement_service.configuration("FGEN channel name", nims.DataType.String, "0")
 @measurement_service.configuration("FGEN load impedance", nims.DataType.Double, 1.0e6)
 @measurement_service.configuration("FGEN pk-pk amplitude", nims.DataType.Double, 1.0)
 @measurement_service.configuration("FGEN start frequency", nims.DataType.Double, 10.0)
 @measurement_service.configuration("FGEN stop frequency", nims.DataType.Double, 10.0e6)
 @measurement_service.configuration("FGEN sweep type", nims.DataType.String, "Logarithmic")
 @measurement_service.configuration("FGEN points or points per decade", nims.DataType.Int32, 8)
-@measurement_service.configuration("FGEN settle time", nims.DataType.Double, 1.0)
 # Scope Configuration
 @measurement_service.configuration("Scope resource name", nims.DataType.String, "NISCOPE1")
 @measurement_service.configuration("Scope input channel", nims.DataType.String, "0")
@@ -90,28 +91,27 @@ measurement_service = nims.MeasurementService(
 @measurement_service.configuration("Scope vout range", nims.DataType.Double, 0.05)
 # Outputs
 @measurement_service.output("Status", nims.DataType.String)
-@measurement_service.output("Frequency (Hz)", nims.DataType.DoubleArray1D)
-@measurement_service.output("PSRR (dB)", nims.DataType.DoubleArray1D)
 @measurement_service.output("PSRR vs Frequency", nims.DataType.DoubleXYData)
 
 def measure(
     nominal_output_voltage: float,
+    dut_setup_time: float,
     source_resource_name: str,
     source_voltage_level: float,
     source_current_limit: float,
-    source_remote_sense: str,
+    source_sense: str,
     load_resource_name: str,
     load_current_level: float,
     load_voltage_limit: float,
-    load_remote_sense: str,
+    load_sense: str,
     fgen_resource_name: str,
+    fgen_channel_name: str,
     fgen_load_impedance: float,
     fgen_pk_pk_amplitude: float,
     fgen_start_frequency: float,
     fgen_stop_frequency: float,
     fgen_sweep_type: str,
     fgen_points_per_decade: int,
-    fgen_settle_time: float,
     scope_resource_name: str,
     scope_input_channel: str,
     scope_output_channel: str,
@@ -149,21 +149,23 @@ def measure(
 
         # Source: DC voltage source
         configure_source_resource(
-            source_session, source_voltage_level, source_current_limit, source_remote_sense)
+            source_session, source_voltage_level, source_current_limit, source_sense)
 
         # FGEN: sine at first frequency
-        configure_fgen(fgen, fgen_load_impedance, fgen_pk_pk_amplitude, fgen_start_frequency)
+        configure_fgen(
+            fgen, fgen_load_impedance, fgen_pk_pk_amplitude, fgen_start_frequency,
+            fgen_channel_name)
 
         # Load: DC current sink
         configure_load_resource(
-            load_session, load_current_level, load_voltage_limit, load_remote_sense)
+            load_session, load_current_level, load_voltage_limit, load_sense)
 
         # Scope channel characteristics (in = Vin, out = Vout)
         configure_scope_channels(
             scope, scope_input_impedance, scope_input_channel, scope_output_channel)
 
         # DC pre-check of Vin and Vout before starting the frequency sweep
-        time.sleep(fgen_settle_time)  # Wait for the source and load to settle
+        time.sleep(dut_setup_time)  # Wait for the source and load to settle
         m1 = source_session.measure_multiple()[0]
         m2 = load_session.measure_multiple()[0]
         _logger.info("DC pre-check: Vin set=%.3f V meas=%.3f V Iin=%.1f mA",
@@ -180,8 +182,9 @@ def measure(
 
         # Frequency sweep 
         for i, f in enumerate(freqs):
-            configure_fgen_sine(fgen, fgen_pk_pk_amplitude, f)
-            time.sleep(fgen_settle_time)
+            configure_fgen_sine(fgen, fgen_pk_pk_amplitude, f, fgen_channel_name)
+            if i == 0:
+                time.sleep(dut_setup_time)  # Settle only at the first frequency
             # Compute the sample rate and number of points for the scope acquisition
             sample_rate, num_pts = compute_acquisition_plan(
                 f, scope_samples_per_cycle, scope_minimum_sample_rate,
@@ -208,11 +211,11 @@ def measure(
                 psrr)
 
             # Stream the results collected so far so InstrumentStudio updates live.
-            status = f"Sweeping {i + 1}/{num_points} ({f:.1f} Hz)"
+            status = f"Sweeping {i + 1}/{num_points} ({f:.1f} Hz)  PSRR={psrr:.2f} dB"
             freq_out = freqs[: i + 1].tolist()
             psrr_out = np.abs(20.0 * np.log10(vout_ripple[: i + 1] / vin_ripple[: i + 1])).tolist()
             psrr_vs_freq = DoubleXYData(x_data=freq_out, y_data=psrr_out)
-            yield (status, freq_out, psrr_out, psrr_vs_freq)
+            yield (status, psrr_vs_freq)
 
     finally:
         if fgen is not None:
@@ -229,8 +232,12 @@ def measure(
             source_session.abort()              # Abort the source session
             source_session.close()              # Close the source session
 
-    status = "The measurement is performed successfully"
-    return (status, freq_out, psrr_out, DoubleXYData(x_data=freq_out, y_data=psrr_out))
+    lines = "\n".join(
+        f"Frequency = {fq:.1f} Hz ; PSRR = {pv:.2f} dB"
+        for fq, pv in zip(freq_out, psrr_out)
+    )
+    status = f"Measurement performed successfully.\n{lines}"
+    return (status, DoubleXYData(x_data=freq_out, y_data=psrr_out))
 
 
 @click.command

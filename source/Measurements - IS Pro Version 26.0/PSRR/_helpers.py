@@ -61,18 +61,20 @@ def configure_load_resource(
 
 
 def configure_fgen(
-    fgen: nifgen.Session, load_impedance: float, vpp: float, freq: float
+    fgen: nifgen.Session, load_impedance: float, vpp: float, freq: float, channel: str = "0"
 ) -> None:
     """Put the FGEN in standard-function mode and start a sine output."""
     fgen.output_mode = nifgen.OutputMode.FUNC  # standard-function (sine) generation
-    fgen.load_impedance = load_impedance
-    configure_fgen_sine(fgen, vpp, freq)
+    fgen.channels[channel].load_impedance = load_impedance
+    configure_fgen_sine(fgen, vpp, freq, channel)
     fgen.initiate()  # start generating
 
 
-def configure_fgen_sine(fgen: nifgen.Session, vpp: float, freq: float) -> None:
+def configure_fgen_sine(
+    fgen: nifgen.Session, vpp: float, freq: float, channel: str = "0"
+) -> None:
     """Set the FGEN sine amplitude and frequency."""
-    fgen.configure_standard_waveform(
+    fgen.channels[channel].configure_standard_waveform(
         waveform=nifgen.Waveform.SINE,
         amplitude=vpp,
         frequency=freq,
