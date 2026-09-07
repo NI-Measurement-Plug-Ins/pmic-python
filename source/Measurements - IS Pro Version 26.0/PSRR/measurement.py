@@ -49,7 +49,7 @@ _logger = logging.getLogger(__name__)
 script_or_exe = sys.executable if getattr(sys, "frozen", False) else __file__
 service_directory = pathlib.Path(script_or_exe).resolve().parent
 measurement_service = nims.MeasurementService(
-    service_config_path=service_directory / "PSRR.serviceconfig",
+    service_config_path=service_directory / "PSRR_PMIC.serviceconfig",
     ui_file_paths=[service_directory / "PSRR.measui"],
 )
 
