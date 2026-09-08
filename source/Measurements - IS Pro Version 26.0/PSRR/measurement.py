@@ -61,7 +61,7 @@ service_directory = pathlib.Path(script_or_exe).resolve().parent
 # e.g. [service_directory / "PSRR.measui", service_directory / "OtherView.measui"].
 measurement_service = nims.MeasurementService(
     service_config_path=service_directory / "PSRR_PMIC.serviceconfig",
-    ui_file_paths=[service_directory / "PSRR_PMIC.measui"],
+    ui_file_paths=[service_directory / "PSRR_PMIC.vi"],
 )
 
 
