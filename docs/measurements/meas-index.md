@@ -3,3 +3,4 @@
  - [Ripple](ripple.md)
  - [Line Regulation](line-regulation.md)
  - [Efficiency and Load Regulation](efficiency-and-load-regulation.md)
+ - [PSRR](PSRR.md)
