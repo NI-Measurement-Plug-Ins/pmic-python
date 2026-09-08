@@ -7,7 +7,15 @@ This service performs PSRR measurement for PMIC.
 ## InstrumentStudio Panel
 
 ### Note:
-By default, the application uses the LabVIEW GUI. If you want to switch to the Measurement UI Editor GUI, update the file name in measurement.py by modifying the ui_file_paths parameter as shown below: **ui_file_paths=[service_directory / "PSRR_PMIC.vi"]**
+By default, the application uses the LabVIEW GUI. If you want to switch to the Measurement UI Editor GUI, update the file name in 'measurement.py', by modifying the ui_file_paths parameter as shown below:
+
+i. LabVIEW GUI:
+
+**ui_file_paths=[service_directory / "PSRR_PMIC.vi"]**
+
+ii. Measurement UI editor GUI:
+
+**ui_file_paths=[service_directory / "PSRR_PMIC.measui"]**
 
 ### Usage with LabVIEW GUI
 
