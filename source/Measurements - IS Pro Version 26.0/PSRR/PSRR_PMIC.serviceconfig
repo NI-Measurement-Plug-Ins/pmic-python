@@ -1,0 +1,20 @@
+{
+  "services": [
+    {
+      "displayName": "PSRR (Py)",
+      "serviceClass": "PSRR_PMIC",
+      "descriptionUrl": "",
+      "providedInterfaces": [
+        "ni.measurementlink.measurement.v1.MeasurementService",
+        "ni.measurementlink.measurement.v2.MeasurementService"
+      ],
+      "path": "start.bat",
+      "version": "0.0.1",
+      "annotations": {
+        "ni/service.description": "PSRR measurement for PMIC",
+        "ni/service.collection": "PMIC",
+        "ni/service.tags": ["PSRR","pmic"]
+      }
+    }
+  ]
+}

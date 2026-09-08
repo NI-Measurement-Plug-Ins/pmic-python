@@ -1,0 +1,7 @@
+ni-measurement-plugin-sdk-service
+nidcpower
+nifgen
+niscope
+click
+hightime
+numpy
