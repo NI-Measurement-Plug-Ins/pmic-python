@@ -67,25 +67,25 @@ measurement_service = nims.MeasurementService(
 
 @measurement_service.register_measurement
 #DUT Configuration
-@measurement_service.configuration("Nominal output voltage", nims.DataType.Double, 3.3)
-@measurement_service.configuration("DUT setup time", nims.DataType.Double, 1.0)
+@measurement_service.configuration("Nominal output voltage (V)", nims.DataType.Double, 3.3)
+@measurement_service.configuration("DUT setup time (s)", nims.DataType.Double, 1.0)
 # Source Configuration
 @measurement_service.configuration("Source resource name", nims.DataType.String, "NISMU1")
-@measurement_service.configuration("Source voltage level", nims.DataType.Double, 20.0)
-@measurement_service.configuration("Source current limit", nims.DataType.Double, 0.5)
+@measurement_service.configuration("Source voltage level (V)", nims.DataType.Double, 20.0)
+@measurement_service.configuration("Source current limit (A)", nims.DataType.Double, 0.5)
 @measurement_service.configuration("Source sense", nims.DataType.String, "Remote")
 # Load Configuration
 @measurement_service.configuration("Load resource name", nims.DataType.String, "NISMU2")
-@measurement_service.configuration("Load current level", nims.DataType.Double, 0.050)
-@measurement_service.configuration("Load voltage limit", nims.DataType.Double, 5.0)
+@measurement_service.configuration("Load current level (A)", nims.DataType.Double, 0.050)
+@measurement_service.configuration("Load voltage limit (V)", nims.DataType.Double, 5.0)
 @measurement_service.configuration("Load sense", nims.DataType.String, "Remote")
 # FGEN Configuration
 @measurement_service.configuration("FGEN resource name", nims.DataType.String, "NIFGEN")
 @measurement_service.configuration("FGEN channel name", nims.DataType.String, "0")
-@measurement_service.configuration("FGEN load impedance", nims.DataType.Double, 1.0e6)
-@measurement_service.configuration("FGEN pk-pk amplitude", nims.DataType.Double, 1.0)
-@measurement_service.configuration("FGEN start frequency", nims.DataType.Double, 10.0)
-@measurement_service.configuration("FGEN stop frequency", nims.DataType.Double, 10.0e6)
+@measurement_service.configuration("FGEN load impedance (ohm)", nims.DataType.Double, 1.0e6)
+@measurement_service.configuration("FGEN pk-pk amplitude (V)", nims.DataType.Double, 1.0)
+@measurement_service.configuration("FGEN start frequency (Hz)", nims.DataType.Double, 10.0)
+@measurement_service.configuration("FGEN stop frequency (Hz)", nims.DataType.Double, 10.0e6)
 @measurement_service.configuration("FGEN sweep type", nims.DataType.String, "Logarithmic")
 @measurement_service.configuration("FGEN points or points per decade", nims.DataType.Int32, 8)
 # Scope Configuration
@@ -96,10 +96,10 @@ measurement_service = nims.MeasurementService(
 @measurement_service.configuration("Scope number of cycles", nims.DataType.Int32, 8)
 @measurement_service.configuration("Scope maximum sample rate", nims.DataType.Double, 100.0e6)
 @measurement_service.configuration("Scope minimum sample rate", nims.DataType.Double, 1.0e2)
-@measurement_service.configuration("Scope input impedance", nims.DataType.Double, 1.0e6)
+@measurement_service.configuration("Scope input impedance (ohm)", nims.DataType.Double, 1.0e6)
 @measurement_service.configuration("Scope probe attenuation Vin", nims.DataType.Double, 10.0)
 @measurement_service.configuration("Scope probe attenuation Vout", nims.DataType.Double, 10.0)
-@measurement_service.configuration("Scope vout range", nims.DataType.Double, 0.05)
+@measurement_service.configuration("Scope vout range (V)", nims.DataType.Double, 0.05)
 # Outputs
 @measurement_service.output("Status", nims.DataType.String)
 @measurement_service.output("PSRR vs Frequency", nims.DataType.DoubleXYData)
